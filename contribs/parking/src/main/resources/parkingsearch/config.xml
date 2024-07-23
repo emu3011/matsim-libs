@@ -12,12 +12,12 @@
 	</module>
 
 	<module name="plans" >
-		<param name="inputPlansFile" value="population100.xml" />
+		<param name="inputPlansFile" value="population100_PGS.xml" />
 	</module>
 
 	<module name="facilities" >
 		<!-- The parkingsearch module uses the standard MATSim facilities as parking locations-->
-		<param name="inputFacilitiesFile" value="parkingFacilities.xml" />
+		<param name="inputFacilitiesFile" value="parkingFacilities_PGS.xml" />
 
 	</module>
 
