@@ -136,7 +136,7 @@ public class PGSDynLeg extends ParkingDynLeg {
 			}
 
 			// since we are not in parking mode, we are simply following along the path (might be guidance or navigation)
-			Id<Link> nextLinkId = PGSUtils.getNextLinkIdFromPath(this.currentLinkIdx, this.path);
+			Id<Link> nextLinkId = this.path.getLinkIdAtIdx(currentLinkIdx + 1);
 
 			return nextLinkId;
 		} else {
