@@ -4,7 +4,6 @@ import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.LinkedList;
 //FOR TRIPROUTER: import java.util.List;
-import org.matsim.contrib.parking.parkingsearch.ParkingUtils;
 import org.matsim.contrib.parking.parkingsearch.manager.ParkingSearchManager;
 import org.matsim.api.core.v01.Scenario;
 //FOR TRIPROUTER: import org.matsim.api.core.v01.TransportMode;
