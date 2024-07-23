@@ -62,6 +62,10 @@ public abstract class Event {
 		if (this instanceof HasVehicleId hasVehicleId && hasVehicleId.getVehicleId() != null) {
 			attr.put(HasVehicleId.ATTRIBUTE_VEHICLE, hasVehicleId.getVehicleId().toString());
 		}
+		// this if statement is added by Emanuel Skodinis (emanuesk@ethz.ch) and supports the HasOccupancy interface
+		if (this instanceof HasOccupancy hasOccupancy && hasOccupancy.getOccupancy() != null) {
+			attr.put(HasOccupancy.ATTRIBUTE_OCCUPANCY, hasOccupancy.getOccupancy().toString());
+		}
 		return attr;
 	}
 
