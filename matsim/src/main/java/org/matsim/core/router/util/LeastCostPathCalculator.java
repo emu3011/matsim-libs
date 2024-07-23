@@ -22,6 +22,7 @@ package org.matsim.core.router.util;
 
 import java.util.List;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
@@ -50,6 +51,38 @@ public interface LeastCostPathCalculator {
 
 		public Node getToNode() {
 			return nodes.get(nodes.size() - 1);
+		}
+
+		/**
+		 * helper method to get end-link ID
+		 * 
+		 * written by Emanuel Skodinis (emanuesk@ethz.ch)
+		 */
+		public Id<Link> getEndLinkId() {
+			return links.get(links.size() - 1).getId();
+		}
+
+		/**
+		 * helper method to get link ID of given index (of path position)
+		 * 
+		 * written by Emanuel Skodinis (emanuesk@ethz.ch)
+		 */
+		public Id<Link> getLinkIdAtIdx(int idx) {
+			return this.links.get(idx).getId();
+		}
+
+		/**
+		 * helper method to append a link to a path
+		 * throws an exception if the old path does not lead to the link to be appended
+		 * 
+		 * written by Emanuel Skodinis (emanuesk@ethz.ch)
+		 */
+		public void appendLink(Link link) throws Exception {
+			if (this.getToNode() != link.getFromNode()) {
+				throw new Exception("tried to append a link to a path that does not lead to that link");
+			}
+			this.nodes.add(link.getToNode());
+        	this.links.add(link);
 		}
 	}
 }
