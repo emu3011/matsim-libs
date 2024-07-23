@@ -223,7 +223,6 @@ public class ParkingGuidanceSystem {
                          final double time) {
         Node startLinkToNode = PGSUtils.getToNodeOf(startLinkId, this.network);
         Node destinationLinkFromNode = PGSUtils.getFromNodeOf(destinationLinkId, this.network);
-        Node destinationLinkToNode = PGSUtils.getToNodeOf(destinationLinkId, this.network);
 
         Path path = this.leastCostPathCalculator.calcLeastCostPath(startLinkToNode,
                                                                    destinationLinkFromNode,
@@ -235,8 +234,13 @@ public class ParkingGuidanceSystem {
         * since the leastCostPathCalculator is only routing from the to-node of the start link to the from-node of the closest parking link,
         * we need to append the link of the parking facility at the end (and therefore also the to-node from the closest parking link)
         */
-        path.nodes.add(destinationLinkToNode);
-        path.links.add(PGSUtils.getLinkOf(destinationLinkId, this.network));
+        Link destinationLink = PGSUtils.getLinkOf(destinationLinkId, this.network);
+
+        try {
+            path.appendLink(destinationLink);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return path;
     }
