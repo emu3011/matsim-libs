@@ -20,11 +20,8 @@ import org.matsim.core.utils.collections.QuadTrees;
 //FOR TRIPROUTER: import org.matsim.core.router.LinkWrapperFacility;
 //FOR TRIPROUTER: import org.matsim.core.router.TripRouter;
 //FOR TRIPROUTER: import org.matsim.core.router.TripStructureUtils;
-import org.matsim.core.router.costcalculators.OnlyTimeDependentTravelDisutility;
-import org.matsim.core.router.speedy.SpeedyALTFactory;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
-import org.matsim.core.trafficmonitoring.FreeSpeedTravelTime;
 
 /**
  * This class is the heart of the Parking Guidance System (PGS). It hosts the algorithm and data structures needed for 
@@ -88,12 +85,7 @@ public class ParkingGuidanceSystem {
             this.quadTree = QuadTrees.createQuadTree(facilitiesWithSensorAndCapacity);
         }
 
-        // create a leastCostPathCalculator with the SpeedyALTFactory (stolen from NetworkRouteValidator)
-        SpeedyALTFactory speedyALTFactory = new SpeedyALTFactory();
-		FreeSpeedTravelTime freeSpeedTravelTime = new FreeSpeedTravelTime(); //TODO: is this correct?
-        this.leastCostPathCalculator = speedyALTFactory.createPathCalculator(this.network,
-                                                                             new OnlyTimeDependentTravelDisutility(freeSpeedTravelTime),//TODO: is this correct?
-                                                                             freeSpeedTravelTime);
+        this.leastCostPathCalculator = PGSUtils.makeLeastCostPathCalculator(this.network);
         
         //FOR TRIPROUTER: tripRouter = new TripRouter.Builder(scenario.getConfig()).build();
     }
@@ -113,30 +105,16 @@ public class ParkingGuidanceSystem {
                       final Id<Link> destinationLinkId,
                       final double time) {
 
-        Link startLink = PGSUtils.getLinkOf(startLinkId, this.network);
-        Link destinationLink = PGSUtils.getLinkOf(destinationLinkId, this.network);
-
         // step 1: find a free parking space closest to destination link
-        ActivityFacility closestParking = this.getParkingClosestToDestination(destinationLink, time);
+        ActivityFacility closestParking = this.getParkingClosestToDestination(destinationLinkId, time);
         if (closestParking == null) return null; // there is no parking within stop-radius around destination
 
-        Link closestParkingLink = PGSUtils.getLinkOf(closestParking, this.network);
-        Node closestParkingFromNode = closestParkingLink.getFromNode();
-        Node closestParkingToNode = closestParkingLink.getToNode();
+        Id<Link> closestParkingLinkId = PGSUtils.getLinkOf(closestParking, this.network).getId();
 
         // step 2: calculate fastest route to closest parking space (the person and the vehicle are not used so we simply pass null for them)
-        Path pathToParking = this.leastCostPathCalculator.calcLeastCostPath(startLink.getToNode(),
-                                                                            closestParkingFromNode,
-                                                                            time,
-                                                                            null,
-                                                                            null);
-        
-        /**
-         * since the leastCostPathCalculator is only routing from the to-node of the start link to the from-node of the closest parking link,
-         * we need to append the link of the parking facility at the end (and therefore also the to-node from the closest parking link)
-         */
-        pathToParking.nodes.add(closestParkingToNode);
-        pathToParking.links.add(closestParkingLink);
+        Path pathToParking = this.navigate(startLinkId,
+                                           closestParkingLinkId,
+                                           time);
 
         return pathToParking;
     }
@@ -204,11 +182,10 @@ public class ParkingGuidanceSystem {
         for (ActivityFacility facility : facilities) {
             if (this.parkingSearchManager.isThereFreeParkingSpaceAt(facility)) {
                 // the facility has a free parking space => check whether it is closer than the closest facility found so far (we dont give time since we walk)
-                Path path = this.leastCostPathCalculator.calcLeastCostPath(PGSUtils.getLinkOf(facility, this.network).getToNode(),
-                                                                           destinationLink.getFromNode(),
-                                                                           time,
-                                                                           null,
-                                                                           null);
+                Path path = this.navigate(facility,
+                                          destinationLink,
+                                          time);
+                
                 double travelTime = path.travelTime;
 
                 //FOR TRIPROUTER: List<? extends PlanElement> route = this.tripRouter.calcRoute(TransportMode.walk,
@@ -232,5 +209,55 @@ public class ParkingGuidanceSystem {
         }
 
         return closestFacility;
+    }
+
+    /**
+     * This function simply navigates. It is called as helper method by getParkingClosestToDestinationFromFacilities
+     * but also by PGSDynLeg in the case where the PGS can not guide.
+     * 
+     * @return is the fastest route from @param startLinkId to @param destinationLinkId at 
+     * given @param time
+     */
+    public Path navigate(final Id<Link> startLinkId,
+                         final Id<Link> destinationLinkId,
+                         final double time) {
+        Node startLinkToNode = PGSUtils.getToNodeOf(startLinkId, this.network);
+        Node destinationLinkFromNode = PGSUtils.getFromNodeOf(destinationLinkId, this.network);
+        Node destinationLinkToNode = PGSUtils.getToNodeOf(destinationLinkId, this.network);
+
+        Path path = this.leastCostPathCalculator.calcLeastCostPath(startLinkToNode,
+                                                                   destinationLinkFromNode,
+                                                                   time,
+                                                                   null,
+                                                                   null);
+
+        /**
+        * since the leastCostPathCalculator is only routing from the to-node of the start link to the from-node of the closest parking link,
+        * we need to append the link of the parking facility at the end (and therefore also the to-node from the closest parking link)
+        */
+        path.nodes.add(destinationLinkToNode);
+        path.links.add(PGSUtils.getLinkOf(destinationLinkId, this.network));
+
+        return path;
+    }
+
+    // for convenience
+    private Path navigate(final ActivityFacility facility,
+                          final Link destinationLink,
+                          final double time) {
+        Id<Link> startLinkId = PGSUtils.getLinkIdOf(facility, this.network);
+        Id<Link> destinationLinkId = destinationLink.getId();
+        
+        return navigate(startLinkId,
+                        destinationLinkId,
+                        time);
+    }
+
+    // for convenience
+    private ActivityFacility getParkingClosestToDestination(final Id<Link> destinationLinkId,
+                                                            final double time) {
+        Link destinationLink = PGSUtils.getLinkOf(destinationLinkId, this.network);
+        
+        return this.getParkingClosestToDestination(destinationLink, time);
     }
 }
