@@ -4,14 +4,14 @@
 
 <!-- ====================================================================== -->
 
-	<facility id="114_curbside" linkId="114" x="-300.0" y="-790.0">
-		<activity type="car interaction">
+	<facility id="111_curbside" linkId="111" x="-900.0" y="-810.0">
+		<activity type="parking">
 			<capacity value="5.0" />
 		</activity>
 
 	</facility>
-	<facility id="314_curbside" linkId="314" x="-300.0" y="-810.0">
-		<activity type="car interaction">
+	<facility id="311_curbside" linkId="311" x="-900.0" y="-790.0">
+		<activity type="parking">
 			<capacity value="5.0" />
 		</activity>
 
@@ -19,15 +19,1260 @@
 
 <!-- ====================================================================== -->
 
-	<facility id="349_curbside" linkId="349" x="300.0" y="-210.0">
-		<activity type="car interaction">
+	<facility id="112_curbside" linkId="112" x="-700.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="312_curbside" linkId="312" x="-700.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="113_curbside" linkId="113" x="-500.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="313_curbside" linkId="313" x="-500.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	
+<!-- ====================================================================== -->
+
+	<facility id="114_curbside" linkId="114" x="-300.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="314_curbside" linkId="314" x="-300.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="115_curbside" linkId="115" x="-100.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="315_curbside" linkId="315" x="-100.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="116_curbside" linkId="116" x="100.0" y="-810.0">
+		<activity type="parking">
 			<capacity value="5.0" />
 		</activity>
 
 	</facility>
-	<facility id="149_curbside" linkId="149" x="300.0" y="-190.0">
-		<activity type="car interaction">
+	<facility id="316_curbside" linkId="316" x="100.0" y="-790.0">
+		<activity type="parking">
 			<capacity value="5.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="117_curbside" linkId="117" x="300.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="317_curbside" linkId="317" x="300.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="118_curbside" linkId="118" x="500.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="318_curbside" linkId="318" x="500.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="119_curbside" linkId="119" x="700.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="319_curbside" linkId="319" x="700.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="120_curbside" linkId="120" x="900.0" y="-810.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="320_curbside" linkId="320" x="900.0" y="-790.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="122_curbside" linkId="122" x="-900.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="322_curbside" linkId="322" x="-900.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="123_curbside" linkId="123" x="-700.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="323_curbside" linkId="323" x="-700.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="124_curbside" linkId="124" x="-500.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="324_curbside" linkId="324" x="-500.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	
+<!-- ====================================================================== -->
+
+	<facility id="125_curbside" linkId="125" x="-300.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="325_curbside" linkId="325" x="-300.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="126_curbside" linkId="126" x="-100.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="326_curbside" linkId="326" x="-100.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="127_curbside" linkId="127" x="100.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="327_curbside" linkId="327" x="100.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="128_curbside" linkId="128" x="300.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="328_curbside" linkId="328" x="300.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="129_curbside" linkId="129" x="500.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="329_curbside" linkId="329" x="500.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="130_curbside" linkId="130" x="700.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="330_curbside" linkId="330" x="700.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="131_curbside" linkId="131" x="900.0" y="-610.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="331_curbside" linkId="331" x="900.0" y="-590.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="133_curbside" linkId="133" x="-900.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="333_curbside" linkId="333" x="-900.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="134_curbside" linkId="134" x="-700.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="334_curbside" linkId="334" x="-700.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="135_curbside" linkId="135" x="-500.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="335_curbside" linkId="335" x="-500.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	
+<!-- ====================================================================== -->
+
+	<facility id="136_curbside" linkId="136" x="-300.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="336_curbside" linkId="336" x="-300.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="137_curbside" linkId="137" x="-100.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="337_curbside" linkId="337" x="-100.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="138_curbside" linkId="138" x="100.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="338_curbside" linkId="338" x="100.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="139_curbside" linkId="139" x="300.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="339_curbside" linkId="339" x="300.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="140_curbside" linkId="140" x="500.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="340_curbside" linkId="340" x="500.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="141_curbside" linkId="141" x="700.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="341_curbside" linkId="341" x="700.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="142_curbside" linkId="142" x="900.0" y="-410.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="342_curbside" linkId="342" x="900.0" y="-390.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="143_curbside" linkId="143" x="-900.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="343_curbside" linkId="343" x="-900.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="144_curbside" linkId="144" x="-700.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="344_curbside" linkId="344" x="-700.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="145_curbside" linkId="145" x="-500.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="345_curbside" linkId="345" x="-500.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	
+<!-- ====================================================================== -->
+
+	<facility id="146_curbside" linkId="146" x="-300.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="346_curbside" linkId="346" x="-300.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="147_curbside" linkId="147" x="-100.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="347_curbside" linkId="347" x="-100.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="148_curbside" linkId="148" x="100.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="348_curbside" linkId="348" x="100.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="149_curbside" linkId="149" x="300.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="349_curbside" linkId="349" x="300.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="150_curbside" linkId="150" x="500.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="350_curbside" linkId="350" x="500.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="151_curbside" linkId="151" x="700.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="351_curbside" linkId="351" x="700.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="152_curbside" linkId="152" x="900.0" y="-210.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="352_curbside" linkId="352" x="900.0" y="-190.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="402_curbside" linkId="402" x="-810.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="202_curbside" linkId="202" x="-790.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="403_curbside" linkId="403" x="-610.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="203_curbside" linkId="203" x="-590.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="404_curbside" linkId="404" x="-410.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="204_curbside" linkId="204" x="-390.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="405_curbside" linkId="405" x="-210.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="205_curbside" linkId="205" x="-190.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="406_curbside" linkId="406" x="-10.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="206_curbside" linkId="206" x="10.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="407_curbside" linkId="407" x="210.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="207_curbside" linkId="207" x="190.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="408_curbside" linkId="408" x="410.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="208_curbside" linkId="208" x="390.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="409_curbside" linkId="409" x="610.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="209_curbside" linkId="209" x="590.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="410_curbside" linkId="410" x="810.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="210_curbside" linkId="210" x="790.0" y="-900.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="412_curbside" linkId="412" x="-810.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="212_curbside" linkId="212" x="-790.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="413_curbside" linkId="413" x="-610.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="213_curbside" linkId="213" x="-590.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="414_curbside" linkId="414" x="-410.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="214_curbside" linkId="214" x="-390.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="415_curbside" linkId="415" x="-210.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="215_curbside" linkId="215" x="-190.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="416_curbside" linkId="416" x="-10.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="216_curbside" linkId="216" x="10.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="417_curbside" linkId="417" x="210.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="217_curbside" linkId="217" x="190.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="418_curbside" linkId="418" x="410.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="218_curbside" linkId="218" x="390.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="419_curbside" linkId="419" x="610.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="219_curbside" linkId="219" x="590.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="420_curbside" linkId="420" x="810.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="220_curbside" linkId="220" x="790.0" y="-700.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="423_curbside" linkId="423" x="-810.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="223_curbside" linkId="223" x="-790.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="424_curbside" linkId="424" x="-610.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="224_curbside" linkId="224" x="-590.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="425_curbside" linkId="425" x="-410.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="225_curbside" linkId="225" x="-390.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="426_curbside" linkId="426" x="-210.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="226_curbside" linkId="226" x="-190.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="427_curbside" linkId="427" x="-10.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="227_curbside" linkId="227" x="10.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="428_curbside" linkId="428" x="210.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="228_curbside" linkId="228" x="190.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="429_curbside" linkId="429" x="410.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="229_curbside" linkId="229" x="390.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="430_curbside" linkId="430" x="610.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="230_curbside" linkId="230" x="590.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="431_curbside" linkId="431" x="810.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="231_curbside" linkId="231" x="790.0" y="-500.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="434_curbside" linkId="434" x="-810.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="5.0" />
+		</activity>
+
+	</facility>
+	<facility id="234_curbside" linkId="234" x="-790.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="435_curbside" linkId="435" x="-610.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+	<facility id="235_curbside" linkId="235" x="-590.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="436_curbside" linkId="436" x="-410.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+	<facility id="236_curbside" linkId="236" x="-390.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="437_curbside" linkId="437" x="-210.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="237_curbside" linkId="237" x="-190.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="438_curbside" linkId="438" x="-10.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="238_curbside" linkId="238" x="10.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="439_curbside" linkId="439" x="210.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="239_curbside" linkId="239" x="190.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="440_curbside" linkId="440" x="410.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="5.0" />
+		</activity>
+
+	</facility>
+	<facility id="240_curbside" linkId="240" x="390.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="441_curbside" linkId="441" x="610.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="241_curbside" linkId="241" x="590.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="442_curbside" linkId="442" x="810.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="242_curbside" linkId="242" x="790.0" y="-300.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="455_curbside" linkId="455" x="-810.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="255_curbside" linkId="255" x="-790.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="456_curbside" linkId="456" x="-610.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="256_curbside" linkId="256" x="-590.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="457_curbside" linkId="457" x="-410.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="257_curbside" linkId="257" x="-390.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="458_curbside" linkId="458" x="-210.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="258_curbside" linkId="258" x="-190.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="459_curbside" linkId="459" x="-10.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="259_curbside" linkId="259" x="10.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="460_curbside" linkId="460" x="210.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+	<facility id="260_curbside" linkId="260" x="190.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="461_curbside" linkId="461" x="410.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="5.0" />
+		</activity>
+
+	</facility>
+	<facility id="261_curbside" linkId="261" x="390.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="462_curbside" linkId="462" x="610.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+	<facility id="262_curbside" linkId="262" x="590.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="10.0" />
+		</activity>
+
+	</facility>
+
+<!-- ====================================================================== -->
+
+	<facility id="463_curbside" linkId="463" x="810.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="0.0" />
+		</activity>
+
+	</facility>
+	<facility id="263_curbside" linkId="263" x="790.0" y="-100.0">
+		<activity type="parking">
+			<capacity value="10.0" />
 		</activity>
 
 	</facility>
