@@ -55,9 +55,9 @@ public class ParkingGuidanceSystem {
      * The @param parkingSearchManager is needed for getting the occupation of parking facilities later.
      */
     @Inject
-    public ParkingGuidanceSystem(Scenario scenario,
-                                 Network network,
-                                 ParkingSearchManager parkingSearchManager) {
+    public ParkingGuidanceSystem(final Scenario scenario,
+                                 final Network network,
+                                 final ParkingSearchManager parkingSearchManager) {
 
         this.network = network;
         this.parkingSearchManager = parkingSearchManager;
@@ -91,7 +91,7 @@ public class ParkingGuidanceSystem {
         // create a leastCostPathCalculator with the SpeedyALTFactory (stolen from NetworkRouteValidator)
         SpeedyALTFactory speedyALTFactory = new SpeedyALTFactory();
 		FreeSpeedTravelTime freeSpeedTravelTime = new FreeSpeedTravelTime(); //TODO: is this correct?
-        this.leastCostPathCalculator = speedyALTFactory.createPathCalculator(network,
+        this.leastCostPathCalculator = speedyALTFactory.createPathCalculator(this.network,
                                                                              new OnlyTimeDependentTravelDisutility(freeSpeedTravelTime),//TODO: is this correct?
                                                                              freeSpeedTravelTime);
         
@@ -148,10 +148,10 @@ public class ParkingGuidanceSystem {
      * 
      * If there are no free parking spaces within a certain stop radius, null is returned.
      */
-    private ActivityFacility getParkingClosestToDestination(Link destinationLink,
-                                                            double time) {
+    private ActivityFacility getParkingClosestToDestination(final Link destinationLink,
+                                                            final double time) {
 
-        if (quadTree == null) return null; // if there are no facilities with sensor and capacity, the quadTree will be null
+        if (this.quadTree == null) return null; // if there are no facilities with sensor and capacity, the quadTree will be null
 
         // step 1: find radius such that there are free parking spots in disc arround destination
 
@@ -192,9 +192,9 @@ public class ParkingGuidanceSystem {
      * 
      * Returns null if there is no facility with free parking spots.
      */
-    private ActivityFacility getParkingClosestToDestinationFromFacilities(Collection<ActivityFacility> facilities,
-                                                                          Link destinationLink,
-                                                                          double time) {
+    private ActivityFacility getParkingClosestToDestinationFromFacilities(final Collection<ActivityFacility> facilities,
+                                                                          final Link destinationLink,
+                                                                          final double time) {
         // closest facility found so far
         ActivityFacility closestFacility = null;
         // travel time from closest facility to destination
@@ -204,11 +204,11 @@ public class ParkingGuidanceSystem {
         for (ActivityFacility facility : facilities) {
             if (this.parkingSearchManager.isThereFreeParkingSpaceAt(facility)) {
                 // the facility has a free parking space => check whether it is closer than the closest facility found so far (we dont give time since we walk)
-                Path path = leastCostPathCalculator.calcLeastCostPath(network.getLinks().get(facility.getLinkId()).getToNode(),
-                                                                      destinationLink.getFromNode(),
-                                                                      time,
-                                                                      null,
-                                                                      null);
+                Path path = this.leastCostPathCalculator.calcLeastCostPath(PGSUtils.getLinkOf(facility, this.network).getToNode(),
+                                                                           destinationLink.getFromNode(),
+                                                                           time,
+                                                                           null,
+                                                                           null);
                 double travelTime = path.travelTime;
 
                 //FOR TRIPROUTER: List<? extends PlanElement> route = this.tripRouter.calcRoute(TransportMode.walk,
