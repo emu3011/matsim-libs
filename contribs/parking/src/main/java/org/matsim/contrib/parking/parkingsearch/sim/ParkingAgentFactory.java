@@ -34,6 +34,11 @@ import org.matsim.contrib.parking.parkingsearch.DynAgent.agentLogic.MemoryBasedP
 import org.matsim.contrib.parking.parkingsearch.DynAgent.agentLogic.NearestParkingSpotAgentLogic;
 import org.matsim.contrib.parking.parkingsearch.DynAgent.agentLogic.ParkingAgentLogic;
 import org.matsim.contrib.parking.parkingsearch.manager.ParkingSearchManager;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSAgentLogic;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSLibrary;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSSearchLogic;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSUtils;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.ParkingGuidanceSystem;
 import org.matsim.contrib.parking.parkingsearch.manager.vehicleteleportationlogic.VehicleTeleportationLogic;
 import org.matsim.contrib.parking.parkingsearch.routing.ParkingRouter;
 import org.matsim.contrib.parking.parkingsearch.search.*;
@@ -69,16 +74,19 @@ public class ParkingAgentFactory implements AgentFactory {
 	Network network;
 	@Inject
 	VehicleTeleportationLogic teleportationLogic;
+	@Inject // by Emanuel Skodinis (emanuesk@ethz.ch): inject the qsim instead of putting it in the constructor
 	QSim qsim;
 	@Inject
 	Config config;
+	@Inject
+	ParkingGuidanceSystem PGS; // by Emanuel Skodinis (emanuesk@ethz.ch): inject the parking guidance system
 
 	/**
 	 *
 	 */
 	@Inject
-	public ParkingAgentFactory(QSim qsim) {
-		this.qsim = qsim;
+	public ParkingAgentFactory() {
+		// by Emanuel Skodinis (emanuesk@ethz.ch): note that qsim is not passed in the constructor anymore
 	}
 
 	@Override
@@ -88,6 +96,113 @@ public class ParkingAgentFactory implements AgentFactory {
 		ParkingAgentLogic agentLogic = null;
 
 		switch (psConfigGroup.getParkingSearchStrategy()) {
+			// following case by Emanuel Skodinis (emanuesk@ethz.ch): add support for the parking strategy ParkingGuidance 
+			case ParkingGuidance -> {
+				// for parking guidance, every person has a parking search strategy
+				String parkingSearchStrategy = PGSUtils.getAttribute(PGSLibrary.parkingSearchStrategy, p);
+
+				// depending on the parking search strategy, create parking logic and agent logic
+				switch (parkingSearchStrategy) {
+					case PGSLibrary.PGS -> {
+						parkingLogic = new PGSSearchLogic(network);
+						agentLogic = new PGSAgentLogic(p.getSelectedPlan(),
+												   	   parkingManager,
+												   	   walkRouter,
+												   	   network,
+												   	   parkingRouter,
+													   events,
+													   parkingLogic,
+													   ((QSim) qsim).getSimTimer(),
+													   teleportationLogic,
+													   psConfigGroup,
+													   PGS);
+					}
+					case PGSLibrary.random -> {
+						parkingLogic = new RandomParkingSearchLogic(network);
+						agentLogic = new ParkingAgentLogic(p.getSelectedPlan(),
+														   parkingManager,
+														   walkRouter,
+														   network,
+														   parkingRouter,
+														   events,
+														   parkingLogic,
+														   ((QSim) qsim).getSimTimer(),
+														   teleportationLogic,
+														   psConfigGroup);
+					}
+					case PGSLibrary.benenson -> {
+						parkingLogic = new BenensonParkingSearchLogic(network, psConfigGroup);
+						agentLogic = new BenensonParkingAgentLogic(p.getSelectedPlan(),
+																   parkingManager,
+																   walkRouter,
+																   network,
+																   parkingRouter,
+																   events,
+																   parkingLogic,
+																   ((QSim) qsim).getSimTimer(),
+																   teleportationLogic,
+																   psConfigGroup);
+					}
+					case PGSLibrary.distanceMemory -> {
+						parkingLogic = new DistanceMemoryParkingSearchLogic(network);
+						agentLogic = new MemoryBasedParkingAgentLogic(p.getSelectedPlan(),
+																	  parkingManager,
+																	  walkRouter,
+																	  network,
+																	  parkingRouter,
+																	  events,
+																	  parkingLogic,
+																	  ((QSim) qsim).getSimTimer(),
+																	  teleportationLogic,
+																	  psConfigGroup);
+					}
+					case PGSLibrary.nearestParkingSpot -> {
+						int numberOfAgents = qsim.getScenario()
+												 .getPopulation()
+												 .getPersons()
+												 .size();
+						int currentAgentNumber = qsim.getAgents().size() + 1;
+						int numberReserved = (int) Math.round(psConfigGroup.getFractionCanReserveParkingInAdvanced() * numberOfAgents);
+						int numberCapacityCheck = (int) Math.round(psConfigGroup.getFractionCanCheckFreeCapacitiesInAdvanced() * numberOfAgents);
+
+						if (currentAgentNumber == 1){
+							LogManager.getLogger(getClass()).info("Number of agents, who can reserve a parking slot in advanced: " + numberReserved);
+							LogManager.getLogger(getClass()).info("Number of agents, who can check a free parking slot in advanced: " + numberCapacityCheck);
+							LogManager.getLogger(getClass()).info("Number of agents, who have no technical support to find a parking slot: " + (numberOfAgents - numberReserved -numberCapacityCheck));
+
+						}
+						if (numberReserved >= currentAgentNumber) {
+							parkingLogic = new NearestParkingSpotSearchLogic(network,
+																			 parkingRouter,
+																			 parkingManager,
+																			 true,
+																			 true);
+						} else if (numberCapacityCheck + numberReserved >= currentAgentNumber){
+							parkingLogic = new NearestParkingSpotSearchLogic(network,
+																			 parkingRouter,
+																			 parkingManager,
+																			 false,
+																			 true);
+						}
+						else
+							parkingLogic = new NearestParkingSpotSearchLogic(network,
+																			 parkingRouter,
+																			 parkingManager,
+																			 false,
+																			 false);
+						agentLogic = new NearestParkingSpotAgentLogic(p.getSelectedPlan(),
+																	  parkingManager,
+																	  walkRouter,
+																	  network,
+																	  parkingRouter,
+																	  events,
+																	  parkingLogic,
+																	  ((QSim) qsim).getSimTimer(),
+																	  teleportationLogic,
+																	  psConfigGroup);
+					}
+				}
+			}
             case Benenson -> {
                 parkingLogic = new BenensonParkingSearchLogic(network, psConfigGroup);
 				agentLogic = new BenensonParkingAgentLogic(p.getSelectedPlan(), parkingManager, walkRouter, network,
