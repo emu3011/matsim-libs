@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.facilities.ActivityFacility;
 import org.matsim.vehicles.Vehicle;
 
 /**
@@ -32,6 +33,9 @@ import org.matsim.vehicles.Vehicle;
 public interface ParkingSearchManager {
 
 	boolean reserveSpaceIfVehicleCanParkHere(Id<Vehicle> vehicleId, Id<Link> linkId);
+	// following two method declarations by Emanuel Skodinis (emanuesk@ethz.ch): function returns whether there is free parking space
+	boolean isThereFreeParkingSpaceAt(Id<Link> linkId);
+	boolean isThereFreeParkingSpaceAt(ActivityFacility facility);
 	Id<Link> getVehicleParkingLocation(Id<Vehicle> vehicleId);
 	boolean parkVehicleHere(Id<Vehicle> vehicleId, Id<Link> linkId, double time);
 	boolean unParkVehicleHere(Id<Vehicle> vehicleId, Id<Link> linkId, double time);
