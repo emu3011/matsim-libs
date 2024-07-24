@@ -14,6 +14,7 @@ import org.matsim.core.utils.io.tabularFileParser.TabularFileParserConfig;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.vehicles.Vehicle;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,7 @@ public class ZoneParkingManager extends FacilityBasedParkingManager {
 	 * @param scenario
 	 */
 	@Inject
-	public ZoneParkingManager(Scenario scenario, String[] pathToZoneTxtFiles) {
+	public ZoneParkingManager(Scenario scenario, String[] pathToZoneTxtFiles) throws IOException{
 		super(scenario);
 
 		this.linksOfZone = new HashMap<String, HashSet<Id<Link>>>();
