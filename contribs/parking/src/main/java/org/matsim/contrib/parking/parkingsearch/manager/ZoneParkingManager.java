@@ -32,7 +32,7 @@ public class ZoneParkingManager extends FacilityBasedParkingManager {
 	 * @param scenario
 	 */
 	@Inject
-	public ZoneParkingManager(Scenario scenario, String[] pathToZoneTxtFiles) throws IOException{
+	public ZoneParkingManager(Scenario scenario, String[] pathToZoneTxtFiles) throws IOException { // update throw of exception by Emanuel Skodinis (emanuesk@ethz.ch): FacilityBasedParkingManager is using a CSV-File-writer to write out the occupancy for visualization
 		super(scenario);
 
 		this.linksOfZone = new HashMap<String, HashSet<Id<Link>>>();
