@@ -78,9 +78,9 @@ public class PGSUtils {
     // create a leastCostPathCalculator with the SpeedyALTFactory (stolen from NetworkRouteValidator)
     public static LeastCostPathCalculator makeLeastCostPathCalculator(Network network) {
         SpeedyALTFactory speedyALTFactory = new SpeedyALTFactory();
-		FreeSpeedTravelTime freeSpeedTravelTime = new FreeSpeedTravelTime(); //TODO: is this correct?
+		FreeSpeedTravelTime freeSpeedTravelTime = new FreeSpeedTravelTime(); // for now assumes to not have info about congestion
         LeastCostPathCalculator leastCostPathCalculator = speedyALTFactory.createPathCalculator(network,
-                                                                                                new OnlyTimeDependentTravelDisutility(freeSpeedTravelTime),//TODO: is this correct?
+                                                                                                new OnlyTimeDependentTravelDisutility(freeSpeedTravelTime),
                                                                                                 freeSpeedTravelTime);
 
         return leastCostPathCalculator;
