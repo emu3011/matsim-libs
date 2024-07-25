@@ -33,6 +33,7 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.config.Config;
 import org.matsim.core.gbl.MatsimRandom;
+import org.matsim.facilities.ActivityFacility;
 import org.matsim.vehicles.Vehicle;
 
 /**
@@ -107,6 +108,23 @@ public class LinkLengthBasedParkingManagerWithRandomInitialUtilisation implement
 	public void reset(int iteration) {
 	}
 
+	/**
+	 * @return whether there is free parking space on the link with @param linkId.
+	 * 
+	 * @author Emanuel Skodinis (emanuesk)
+	 */
+	public boolean isThereFreeParkingSpaceAt(Id<Link> linkId) {
+		return (this.occupation.get(linkId).intValue()<this.capacity.get(linkId));
+	}
 
+	/**
+	 * @return whether there is free parking space on the link of @param facility.
+	 * 
+	 * @author Emanuel Skodinis (emanuesk)
+	 */
+	@Override
+	public boolean isThereFreeParkingSpaceAt(ActivityFacility facility) {
+		return isThereFreeParkingSpaceAt(facility.getLinkId());
+	}
 
 }
