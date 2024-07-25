@@ -36,7 +36,7 @@ public final class PGSConfigurator {
 
 
     // =================================================================================================
-    // RunIdModifier
+    // IdModifier
     // -------------------------------------------------------------------------------------------------
 
     // the source and result population file paths
@@ -54,6 +54,12 @@ public final class PGSConfigurator {
     public static final String resultFacilitiesFilePath = "/Users/emanuesk/Documents/PGSFiles/parkingFacilities_PGS.xml";
     // share of facilities with sensor
     public static final double shareOfFacilitiesWithSensor = 1.0;
+    // flag whether the capacity of the facilities should be modified
+    public static final boolean modifyCapacityFlag = true;
+    // maximum parking space capacity
+    public static final int maximumCapacity = 10;
+    // probability of facility getting capacity 0
+    public static final double probabilityZeroCapacity = 0.7;
 
     // =================================================================================================
 
