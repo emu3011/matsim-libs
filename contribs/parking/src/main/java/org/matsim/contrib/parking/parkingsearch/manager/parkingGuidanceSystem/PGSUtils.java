@@ -85,4 +85,8 @@ public class PGSUtils {
 
         return leastCostPathCalculator;
     }
+
+    public static Collection<? extends Person> getPersons(Scenario scenario) {
+        return scenario.getPopulation().getPersons().values();
+    }
 }
