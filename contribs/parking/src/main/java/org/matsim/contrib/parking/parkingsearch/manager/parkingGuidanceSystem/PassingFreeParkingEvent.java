@@ -16,7 +16,7 @@ import org.matsim.vehicles.Vehicle;
  */
 public final class PassingFreeParkingEvent extends Event implements HasVehicleId {
 
-    public static final String EVENT_TYPE = "passingFreeParking";
+    public static final String EVENT_TYPE = "passing free parking";
 
     private final Id<Vehicle> vehicleId;
 
