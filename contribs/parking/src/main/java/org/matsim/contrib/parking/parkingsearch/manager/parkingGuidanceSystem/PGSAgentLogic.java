@@ -68,12 +68,12 @@ public class PGSAgentLogic extends ParkingAgentLogic {
 		Route plannedRoute = currentPlannedLeg.getRoute();
 		
 		// step 2: calculate actual route
-		// QUESTION: should this route already be to the closest parking facility? No since we need the destination link.
 		NetworkRoute actualRoute = this.parkingRouter.getRouteFromParkingToDestination(plannedRoute.getEndLinkId(), 
 																					   now,
 																					   this.agent.getCurrentLinkId());
 		
 		// QUESTION: why do we have to unpark the vehicle again if the method is called nextStateAfterUnParkActivity?
+		// ANSWER: activity vs. action
 		if ((this.parkingManager.unParkVehicleHere(currentlyAssignedVehicleId,
 												   agent.getCurrentLinkId(),
 												   now)) 					  || isInitialLocation){
