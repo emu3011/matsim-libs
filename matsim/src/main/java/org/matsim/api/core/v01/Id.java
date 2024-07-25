@@ -24,6 +24,7 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.gbl.Gbl;
+import org.matsim.facilities.ActivityFacility;
 import org.matsim.vehicles.Vehicle;
 
 import java.util.ArrayList;
@@ -225,6 +226,10 @@ public abstract class Id<T> implements Comparable<Id<T>> {
 	}
 	public static Id<Vehicle> createVehicleId( final String str ) {
 		return create( str, Vehicle.class ) ;
+	}
+	// added by Emanuel Skodinis (emanuesk@ethz.ch)
+	public static Id<ActivityFacility> createFacilityId( final String str ) {
+		return create( str, ActivityFacility.class ) ;
 	}
 
 }
