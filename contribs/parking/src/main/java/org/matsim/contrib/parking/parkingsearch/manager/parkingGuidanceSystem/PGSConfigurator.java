@@ -27,7 +27,7 @@ public final class PGSConfigurator {
     // -------------------------------------------------------------------------------------------------
 
     // path to config XML-file
-    public static final String configXMLFilePath = "parkingsearch/config.xml";
+    public static final String configXMLFilePath = "/Users/emanuesk/Documents/PGSFiles/config.xml";
 
     // number of MATSim iterations
     public static final int numIterations = 1;
@@ -40,20 +40,20 @@ public final class PGSConfigurator {
     // -------------------------------------------------------------------------------------------------
 
     // the source and result population file paths
-    public static final String sourcePopulationFilePath = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/resources/parkingsearch/population100.xml";
-    public static final String resultPopulationFilePath = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/resources/parkingsearch/population100_PGS.xml";
+    public static final String sourcePopulationFilePath = "/Users/emanuesk/Documents/PGSFiles/population100.xml";
+    public static final String resultPopulationFilePath = "/Users/emanuesk/Documents/PGSFiles/population100_PGS.xml";
     // shares of parking search strategies
-    public static final double shareOfPGS = 0.5;
-    public static final double shareOfRandom = 0.5;
+    public static final double shareOfPGS = 0.3;
+    public static final double shareOfRandom = 0.7;
     public static final double shareOfBenenson = 0.0;
     public static final double shareOfDistanceMemory = 0.0;
     public static final double shareOfNearestParkingSpot = 0.0;
 
     // the source and result facility file paths
-    public static final String sourceFacilitiesFilePath = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/resources/parkingsearch/parkingFacilities.xml";
-    public static final String resultFacilitiesFilePath = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/resources/parkingsearch/parkingFacilities_PGS.xml";
+    public static final String sourceFacilitiesFilePath = "/Users/emanuesk/Documents/PGSFiles/parkingFacilities.xml";
+    public static final String resultFacilitiesFilePath = "/Users/emanuesk/Documents/PGSFiles/parkingFacilities_PGS.xml";
     // share of facilities with sensor
-    public static final double shareOfFacilitiesWithSensor = 0.0;
+    public static final double shareOfFacilitiesWithSensor = 1.0;
 
     // =================================================================================================
 
