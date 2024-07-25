@@ -26,14 +26,6 @@
 			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
 		</attributes>
 	</facility>
-	<facility id="114_curbside_noSensor" linkId="114" x="-300.0" y="-810.0">
-		<activity type="parking">			<capacity value="0.0" />
-
-		</activity>
-		<attributes>
-			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
-		</attributes>
-	</facility>
 	<facility id="115_curbside_noSensor" linkId="115" x="-100.0" y="-810.0">
 		<activity type="parking">			<capacity value="0.0" />
 
@@ -970,14 +962,6 @@
 			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
 		</attributes>
 	</facility>
-	<facility id="349_curbside_noSensor" linkId="349" x="300.0" y="-190.0">
-		<activity type="parking">			<capacity value="0.0" />
-
-		</activity>
-		<attributes>
-			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
-		</attributes>
-	</facility>
 	<facility id="350_curbside_noSensor" linkId="350" x="500.0" y="-190.0">
 		<activity type="parking">			<capacity value="0.0" />
 
@@ -1355,6 +1339,22 @@
 		</attributes>
 	</facility>
 	<facility id="463_curbside_noSensor" linkId="463" x="810.0" y="-100.0">
+		<activity type="parking">			<capacity value="0.0" />
+
+		</activity>
+		<attributes>
+			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
+		</attributes>
+	</facility>
+	<facility id="HOME_114_curbside_noSensor" linkId="114" x="-300.0" y="-810.0">
+		<activity type="parking">			<capacity value="0.0" />
+
+		</activity>
+		<attributes>
+			<attribute name="hasSensor" class="java.lang.String">noSensor</attribute>
+		</attributes>
+	</facility>
+	<facility id="WORK_349_curbside_noSensor" linkId="349" x="300.0" y="-190.0">
 		<activity type="parking">			<capacity value="0.0" />
 
 		</activity>

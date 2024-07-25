@@ -6,7 +6,9 @@ package org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem;
  * @author Emanuel Skodinis (emanuesk@ethz.ch)
  */
 public class RunIdModifier {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+		PGSConfigurator.checkIfParametersAreLegal();
+
 		IdModifier.modifyPersonIdsToStrategy(PGSConfigurator.sourcePopulationFilePath,
 											 PGSConfigurator.resultPopulationFilePath,
 											 PGSConfigurator.shareOfPGS,

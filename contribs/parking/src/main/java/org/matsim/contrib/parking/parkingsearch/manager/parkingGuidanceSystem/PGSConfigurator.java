@@ -61,7 +61,23 @@ public final class PGSConfigurator {
         // prevent creating instances of this class
     }
 
-    public static boolean parametersAreLegal() {
-        return false;
+    // check whether the configuration parameters are legal
+    public static void checkIfParametersAreLegal() throws Exception {
+        double[] shares = {shareOfPGS, shareOfRandom, shareOfBenenson, shareOfDistanceMemory, shareOfNearestParkingSpot};
+        double sum = 0;
+
+        for (double share : shares) {
+            // check that the shares of the parking search strategies are between 0 and 1
+            if (share < 0) throw new Exception("a share of the parking search strategies is not in [0, 1]");
+            sum += share;
+        }
+
+        // check that the shares of the parking search strategies sum up to 1
+        if (sum != 1.0) throw new Exception("shares of the parking search strategies do not sum up to 1");
+
+        // check that stop-radius is bigger than the initial radius
+        if (initialSearchRadius > stopRadius) throw new Exception("stop-radius is not bigger than the initial search radius");
+
+        if (shareOfFacilitiesWithSensor < 0 || shareOfFacilitiesWithSensor > 1) throw new Exception("share of facilities with sensor is not in [0, 1]");
     }
 }
