@@ -23,6 +23,15 @@ public final class PGSConfigurator {
 
 
     // =================================================================================================
+    // FacilityBasedParkingManager
+    // -------------------------------------------------------------------------------------------------
+
+    public static final String occupationCSVFilePath = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/occupation.csv";
+
+    // =================================================================================================
+
+
+    // =================================================================================================
     // RunParkingSearchExample
     // -------------------------------------------------------------------------------------------------
 
