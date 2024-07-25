@@ -1,6 +1,7 @@
 package org.matsim.contrib.parking.parkingsearch;
 
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.IdModifier;
 import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSConfigurator;
 import org.matsim.contrib.parking.parkingsearch.sim.ParkingSearchConfigGroup;
 import org.matsim.contrib.parking.parkingsearch.sim.SetupParking;
@@ -19,7 +20,21 @@ import org.matsim.core.scenario.ScenarioUtils;
 
 public class RunPGSParkingSearchExample {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+        PGSConfigurator.checkIfParametersAreLegal();
+
+		IdModifier.modifyPersonIdsToStrategy(PGSConfigurator.sourcePopulationFilePath,
+											 PGSConfigurator.resultPopulationFilePath,
+											 PGSConfigurator.shareOfPGS,
+											 PGSConfigurator.shareOfRandom,
+											 PGSConfigurator.shareOfBenenson,
+											 PGSConfigurator.shareOfDistanceMemory,
+											 PGSConfigurator.shareOfNearestParkingSpot);
+		
+		IdModifier.modifyFacilityIdsToKnowledge(PGSConfigurator.sourceFacilitiesFilePath,
+												PGSConfigurator.resultFacilitiesFilePath,
+												PGSConfigurator.shareOfFacilitiesWithSensor);
+
 		// step 1: load config file
 		Config config = ConfigUtils.loadConfig(PGSConfigurator.configXMLFilePath, new ParkingSearchConfigGroup());
 
