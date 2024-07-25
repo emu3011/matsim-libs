@@ -3,23 +3,22 @@ package org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem;
 import jakarta.inject.Inject;
 import java.util.Collection;
 import java.util.LinkedList;
-//FOR TRIPROUTER: import java.util.List;
+import java.util.List;
 import org.matsim.contrib.parking.parkingsearch.manager.ParkingSearchManager;
 import org.matsim.api.core.v01.Scenario;
-//FOR TRIPROUTER: import org.matsim.api.core.v01.TransportMode;
+import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
-//FOR TRIPROUTER: import org.matsim.api.core.v01.population.Leg;
-//FOR TRIPROUTER: import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.facilities.ActivityFacility;
-//FOR TRIPROUTER: import org.matsim.utils.objectattributes.attributable.AttributesImpl;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.utils.collections.QuadTree;
 import org.matsim.core.utils.collections.QuadTrees;
-//FOR TRIPROUTER: import org.matsim.core.router.LinkWrapperFacility;
-//FOR TRIPROUTER: import org.matsim.core.router.TripRouter;
-//FOR TRIPROUTER: import org.matsim.core.router.TripStructureUtils;
+import org.matsim.core.router.LinkWrapperFacility;
+import org.matsim.core.router.TripRouter;
+import org.matsim.core.router.TripStructureUtils;
 import org.matsim.core.router.util.LeastCostPathCalculator;
 import org.matsim.core.router.util.LeastCostPathCalculator.Path;
 
@@ -42,7 +41,7 @@ public class ParkingGuidanceSystem {
 
     private QuadTree<ActivityFacility> quadTree;
     private LeastCostPathCalculator leastCostPathCalculator;
-    //FOR TRIPROUTER: private TripRouter tripRouter;
+    private TripRouter tripRouter;
 
     /**
      * Constructor builds the quadTree data structure from the parking facilities of @param scenario
@@ -54,10 +53,12 @@ public class ParkingGuidanceSystem {
     @Inject
     public ParkingGuidanceSystem(final Scenario scenario,
                                  final Network network,
-                                 final ParkingSearchManager parkingSearchManager) {
+                                 final ParkingSearchManager parkingSearchManager,
+                                 final TripRouter tripRouter) {
 
         this.network = network;
         this.parkingSearchManager = parkingSearchManager;
+        this.tripRouter = tripRouter;
 
         // get all facilities with positive capacity and sensor
         Collection<ActivityFacility> facilities = PGSUtils.getFacilities(scenario);
@@ -86,8 +87,6 @@ public class ParkingGuidanceSystem {
         }
 
         this.leastCostPathCalculator = PGSUtils.makeLeastCostPathCalculator(this.network);
-        
-        //FOR TRIPROUTER: tripRouter = new TripRouter.Builder(scenario.getConfig()).build();
     }
 
     /**
@@ -182,23 +181,18 @@ public class ParkingGuidanceSystem {
         for (ActivityFacility facility : facilities) {
             if (this.parkingSearchManager.isThereFreeParkingSpaceAt(facility)) {
                 // the facility has a free parking space => check whether it is closer than the closest facility found so far (we dont give time since we walk)
-                Path path = this.navigate(facility,
-                                          destinationLink,
-                                          time);
-                
-                double travelTime = path.travelTime;
-
-                //FOR TRIPROUTER: List<? extends PlanElement> route = this.tripRouter.calcRoute(TransportMode.walk,
-                //FOR TRIPROUTER:                                                               facility,
-                //FOR TRIPROUTER:                                                               new LinkWrapperFacility(destinationLink),
-                //FOR TRIPROUTER:                                                               0,
-                //FOR TRIPROUTER:                                                               null,
-                //FOR TRIPROUTER:                                                               new AttributesImpl());
-                //FOR TRIPROUTER: List<Leg> legs = TripStructureUtils.getLegs(route);
-                //FOR TRIPROUTER: double travelTime = 0;
-                //FOR TRIPROUTER: for (Leg leg : legs) {
-                //FOR TRIPROUTER:     travelTime += leg.getTravelTime().seconds();
-                //FOR TRIPROUTER: }
+                List<? extends PlanElement> route = this.tripRouter.calcRoute(TransportMode.walk,
+                                                                              facility,
+                                                                              new LinkWrapperFacility(destinationLink),
+                                                                              0,
+                                                                              null,
+                                                                              null);
+                // compute travel time by adding travel times of the legs
+                List<Leg> legs = TripStructureUtils.getLegs(route);
+                double travelTime = 0;
+                for (Leg leg : legs) {
+                    travelTime += leg.getTravelTime().seconds();
+                }
                 
                 if (closestFacility == null || travelTime < shortestTravelTime) {
                     // the facility is closer than the closest facility and takes its place
@@ -243,18 +237,6 @@ public class ParkingGuidanceSystem {
         }
 
         return path;
-    }
-
-    // for convenience
-    private Path navigate(final ActivityFacility facility,
-                          final Link destinationLink,
-                          final double time) {
-        Id<Link> startLinkId = PGSUtils.getLinkIdOf(facility, this.network);
-        Id<Link> destinationLinkId = destinationLink.getId();
-        
-        return navigate(startLinkId,
-                        destinationLinkId,
-                        time);
     }
 
     // for convenience
