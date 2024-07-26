@@ -109,22 +109,25 @@ public class LinkLengthBasedParkingManagerWithRandomInitialUtilisation implement
 	}
 
 	/**
-	 * @return whether there is free parking space on the link with @param linkId.
+	 * @return number of free parking spaces at @param linkId.
 	 * 
 	 * @author Emanuel Skodinis (emanuesk)
 	 */
-	public boolean isThereFreeParkingSpaceAt(Id<Link> linkId) {
-		return (this.occupation.get(linkId).intValue()<this.capacity.get(linkId));
+	public int getNumFreeParkingSpacesAt(Id<Link> linkId) {
+		int capacity = this.capacity.get(linkId).intValue();
+		int occupation = this.occupation.get(linkId).intValue();
+		
+		return capacity - occupation;
 	}
 
 	/**
-	 * @return whether there is free parking space on the link of @param facility.
+	 * @return number of free parking spaces at @param facility.
 	 * 
 	 * @author Emanuel Skodinis (emanuesk)
 	 */
 	@Override
-	public boolean isThereFreeParkingSpaceAt(ActivityFacility facility) {
-		return isThereFreeParkingSpaceAt(facility.getLinkId());
+	public int getNumFreeParkingSpacesAt(ActivityFacility facility) {
+		return getNumFreeParkingSpacesAt(facility.getLinkId());
 	}
 
 }

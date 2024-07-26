@@ -112,7 +112,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 			this.occupation.put(fac.getId(), new MutableLong(0));
 
 			// added by Emanuel Skodinis (emanuesk@ethz.ch): write initial occupation of the facilities
-			int capacity = (int) PGSUtils.getCapacity(fac);
+			int capacity = PGSUtils.getCapacity(fac);
 			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", "0.0"};
 			writer.writeNext(row);
 
@@ -236,7 +236,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 
 				// added by Emanuel Skodinis (emanuesk@ethz.ch): write new row since vehicle got parked and therefore the occupation change has to be logged
 				ActivityFacility fac = parkingFacilities.get(facId);
-				int capacity = (int) PGSUtils.getCapacity(fac);
+				int capacity = PGSUtils.getCapacity(fac);
 				int occ = this.occupation.get(facId).intValue();
 				double percentageOfOccupancy = (double) occ / (double) capacity;
 				String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(percentageOfOccupancy)};
@@ -452,36 +452,35 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 	}
 
 	/**
-	 * @return whether there is free parking space on the link with @param linkId.
+	 * @return number of free parking spaces at @param linkId.
 	 * 
 	 * @author Emanuel Skodinis (emanuesk@ethz.ch)
 	 */
-	public boolean isThereFreeParkingSpaceAt(Id<Link> linkId) {
+	public int getNumFreeParkingSpacesAt(Id<Link> linkId) {
+		int numFreeParkingSpaces = 0;
 		// get all parking facilities at the link
 		Set<Id<ActivityFacility>> parkingFacilitiesAtLink = this.facilitiesPerLink.get(linkId);
 		
-		// go over all facilities at the link and check whether any of them has free parking spaces
+		// go over all facilities at the link and add up all numbers of free parking spaces
 		for (Id<ActivityFacility> facility : parkingFacilitiesAtLink) {
-			double capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility));
-			double occupancy = this.occupation.get(facility).doubleValue();
-			if (occupancy < capacity) {
-				return true;
-			}
+			int capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility));
+			int occupation = this.occupation.get(facility).intValue();
+			numFreeParkingSpaces += (capacity - occupation);
 		}
 
-		return false;
+		return numFreeParkingSpaces;
 	}
 
 	/**
-	 * @return whether there is free parking space at @param facility.
+	 * @return number of free parking spaces at @param facility.
 	 * 
 	 * @author Emanuel Skodinis (emanuesk@ethz.ch)
 	 */
 	@Override
-	public boolean isThereFreeParkingSpaceAt(ActivityFacility facility) {
-		double capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility.getId()));
-		double occupancy = this.occupation.get(facility.getId()).doubleValue();
+	public int getNumFreeParkingSpacesAt(ActivityFacility facility) {
+		int capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility.getId()));
+		int occupation = this.occupation.get(facility.getId()).intValue();
 		
-		return occupancy < capacity;
+		return capacity - occupation;
 	}
 }

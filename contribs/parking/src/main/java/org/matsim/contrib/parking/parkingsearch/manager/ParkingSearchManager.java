@@ -34,8 +34,8 @@ public interface ParkingSearchManager {
 
 	boolean reserveSpaceIfVehicleCanParkHere(Id<Vehicle> vehicleId, Id<Link> linkId);
 	// following two method declarations by Emanuel Skodinis (emanuesk@ethz.ch): function returns whether there is free parking space
-	boolean isThereFreeParkingSpaceAt(Id<Link> linkId);
-	boolean isThereFreeParkingSpaceAt(ActivityFacility facility);
+	int getNumFreeParkingSpacesAt(Id<Link> linkId);
+	int getNumFreeParkingSpacesAt(ActivityFacility facility);
 	Id<Link> getVehicleParkingLocation(Id<Vehicle> vehicleId);
 	boolean parkVehicleHere(Id<Vehicle> vehicleId, Id<Link> linkId, double time);
 	boolean unParkVehicleHere(Id<Vehicle> vehicleId, Id<Link> linkId, double time);
