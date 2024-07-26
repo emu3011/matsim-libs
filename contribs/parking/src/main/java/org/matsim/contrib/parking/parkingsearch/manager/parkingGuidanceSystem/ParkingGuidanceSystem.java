@@ -2,8 +2,11 @@ package org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem;
 
 import jakarta.inject.Inject;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import org.matsim.contrib.parking.parkingsearch.manager.ParkingSearchManager;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.TransportMode;
@@ -13,6 +16,8 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.Leg;
 import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.facilities.ActivityFacility;
+import org.matsim.vehicles.Vehicle;
+import org.apache.commons.lang3.mutable.MutableLong;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.utils.collections.QuadTree;
 import org.matsim.core.utils.collections.QuadTrees;
@@ -43,6 +48,9 @@ public class ParkingGuidanceSystem {
     private LeastCostPathCalculator leastCostPathCalculator;
     private TripRouter tripRouter;
 
+    private Map<Id<ActivityFacility>, MutableLong> numGuidedToFacilityMap = new HashMap<>();
+    private Map<Id<Vehicle>, Id<ActivityFacility>> vehicleToFacilityGuidanceMap = new HashMap<>();
+
     /**
      * Constructor builds the quadTree data structure from the parking facilities of @param scenario
      * (with parking) and creates a leastCostPathCalculator (SpeedyALT).
@@ -71,7 +79,7 @@ public class ParkingGuidanceSystem {
             // if the attribute is null, we assume there is a sensor
             if (hasSensor == null || hasSensor.equals(PGSLibrary.sensor)) {
                 // if the facility has a sensor, we check whether it has capacity
-                double capacity = PGSUtils.getCapacity(facility);
+                int capacity = PGSUtils.getCapacity(facility);
                 if (capacity > 0) {
                     facilitiesWithSensorAndCapacity.add(facility);
                 }
@@ -90,6 +98,23 @@ public class ParkingGuidanceSystem {
     }
 
     /**
+     * Update the guidance mappings with the guidance of @param vehicleId to the @param newFacilityId.
+     */
+    private void putNewGuidanceInGuidanceMap(final Id<Vehicle> vehicleId,
+                                             final Id<ActivityFacility> newFacilityId) {
+        // remove old guidance in the guidance map
+        this.removeGuidanceInGuidanceMap(vehicleId);
+
+        // increment number of guidances to the facility of this guidance
+        MutableLong numGuidedToFacility = this.numGuidedToFacilityMap.get(newFacilityId);
+        if (numGuidedToFacility == null) this.numGuidedToFacilityMap.put(newFacilityId, new MutableLong(1)); // if not yet in system
+        else numGuidedToFacility.increment();
+
+        // map the vehicle to the facility of this guidance
+        this.vehicleToFacilityGuidanceMap.put(vehicleId, newFacilityId);
+    }
+
+    /**
      * This function is the heart of the PGS. Here lives the algorithm that computes the guidance for the users.
      * 
      * It gets called by a user that wants to drive at time @param startTime 
@@ -100,13 +125,17 @@ public class ParkingGuidanceSystem {
      * 
      * The function is also called every time the parking spot, that is currently routed to, gets occupied (a so called "rerouting event").
      */
-    public Path guide(final Id<Link> startLinkId,
+    public Path guide(final Id<Vehicle> vehicleId,
+                      final Id<Link> startLinkId,
                       final Id<Link> destinationLinkId,
                       final double time) {
 
         // step 1: find a free parking space closest to destination link
         ActivityFacility closestParking = this.getParkingClosestToDestination(destinationLinkId, time);
         if (closestParking == null) return null; // there is no parking within stop-radius around destination
+
+        // put the guidance into the guidance-map
+        this.putNewGuidanceInGuidanceMap(vehicleId, closestParking.getId());
 
         Id<Link> closestParkingLinkId = PGSUtils.getLinkOf(closestParking, this.network).getId();
 
@@ -179,7 +208,11 @@ public class ParkingGuidanceSystem {
 
         // go over all facilities and check whether there are free parking spots
         for (ActivityFacility facility : facilities) {
-            if (this.parkingSearchManager.isThereFreeParkingSpaceAt(facility)) {
+            // get the amount of people that already get guided to the facility
+            MutableLong numGuidedToFacility = this.numGuidedToFacilityMap.get(facility.getId());
+            if (numGuidedToFacility == null) numGuidedToFacility = new MutableLong(0);
+
+            if (this.parkingSearchManager.getNumFreeParkingSpacesAt(facility) - numGuidedToFacility.intValue() > 0) { // note that we consider the vehicles guided to the facility
                 // the facility has a free parking space => check whether it is closer than the closest facility found so far (we dont give time since we walk)
                 List<? extends PlanElement> route = this.tripRouter.calcRoute(TransportMode.walk,
                                                                               facility,
@@ -206,11 +239,10 @@ public class ParkingGuidanceSystem {
     }
 
     /**
-     * This function simply navigates. It is called as helper method by getParkingClosestToDestinationFromFacilities
-     * but also by PGSDynLeg in the case where the PGS can not guide.
+     * This function simply navigates.
      * 
      * @return is the fastest route from @param startLinkId to @param destinationLinkId at 
-     * given @param time
+     * given @param time.
      */
     public Path navigate(final Id<Link> startLinkId,
                          final Id<Link> destinationLinkId,
@@ -245,5 +277,35 @@ public class ParkingGuidanceSystem {
         Link destinationLink = PGSUtils.getLinkOf(destinationLinkId, this.network);
         
         return this.getParkingClosestToDestination(destinationLink, time);
+    }
+
+    /**
+     * In the case where the PGS fails to guide, this function is called to @return a navigation from @param startLinkId to @param destinationLinkId at @param time.
+     * The @param vehicleId is needed to update the guidance-map.
+     */
+    public Path navigateInsteadOfGuidance(final Id<Vehicle> vehicleId,
+                                          final Id<Link> startLinkId,
+                                          final Id<Link> destinationLinkId,
+                                          final double time) {
+        // update the guidance-map
+        this.removeGuidanceInGuidanceMap(vehicleId);
+        
+        return navigate(startLinkId,
+                        destinationLinkId,
+                        time);
+    }
+
+    /**
+     * Removes the guidance (if there is currently one) of @param vehicleId in the guidance-map.
+     */
+    public void removeGuidanceInGuidanceMap(Id<Vehicle> vehicleId) {
+        // get old facility that the vehicle is currently guided to
+        Id<ActivityFacility> oldFacilityId = this.vehicleToFacilityGuidanceMap.get(vehicleId);
+
+        // if the vehicle is currently guided to a facility, we need to decrement the number of people guided that facility and remove the vehicle in the guidance-map
+        if (oldFacilityId != null) {
+            this.numGuidedToFacilityMap.get(oldFacilityId).decrement();
+            this.vehicleToFacilityGuidanceMap.remove(vehicleId);
+        }
     }
 }
