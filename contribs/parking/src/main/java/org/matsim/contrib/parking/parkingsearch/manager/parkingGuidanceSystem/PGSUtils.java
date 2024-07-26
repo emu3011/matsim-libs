@@ -69,10 +69,10 @@ public class PGSUtils {
     }
 
     // retrieves capacity of a facility
-    public static double getCapacity(ActivityFacility facility) {
-        return facility.getActivityOptions()
-                       .get(ParkingUtils.ParkingStageInteractionType)
-                       .getCapacity();
+    public static int getCapacity(ActivityFacility facility) {
+        return (int) facility.getActivityOptions()
+                             .get(ParkingUtils.ParkingStageInteractionType)
+                             .getCapacity();
     }
 
     // create a leastCostPathCalculator with the SpeedyALTFactory (stolen from NetworkRouteValidator)
