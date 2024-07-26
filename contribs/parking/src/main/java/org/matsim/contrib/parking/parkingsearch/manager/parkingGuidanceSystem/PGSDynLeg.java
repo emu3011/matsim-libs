@@ -67,7 +67,8 @@ public class PGSDynLeg extends ParkingDynLeg {
 
 		// try to get guidance
 		this.guidanceMode = true;
-		this.path = this.PGS.guide(this.route.getStartLinkId(),
+		this.path = this.PGS.guide(this.vehicleId,
+								   this.route.getStartLinkId(),
 								   this.route.getEndLinkId(),
 								   time);
 
@@ -107,8 +108,8 @@ public class PGSDynLeg extends ParkingDynLeg {
 																	 this.currentLinkId));
 
 				// try to park on current link
-				this.hasFoundParking = this.parkingManager.reserveSpaceIfVehicleCanParkHere(this.vehicleId, this.currentLinkId);
-			} else if (this.guidanceMode && this.parkingManager.isThereFreeParkingSpaceAt(this.currentLinkId)) { // check if we are passing a free parking space during guidance
+				this.hasFoundParking = this.tryToPark();
+			} else if (this.guidanceMode && (this.parkingManager.getNumFreeParkingSpacesAt(this.currentLinkId) > 0)) { // check if we are passing a free parking space during guidance
 				/**
 				 * we are not in parking mode,
 				 * we are in guidance mode,
@@ -120,8 +121,21 @@ public class PGSDynLeg extends ParkingDynLeg {
 				this.events.processEvent(new PassingFreeParkingEvent(time, this.vehicleId));
 			}
 		} else { // if in parking mode, try to park at current link
-			this.hasFoundParking = this.parkingManager.reserveSpaceIfVehicleCanParkHere(this.vehicleId, this.currentLinkId);
+			this.hasFoundParking = this.tryToPark();
 		}
+	}
+
+	/**
+	 * Tries to park @param vehicleId at @param linkId and @return whether it succeeded.
+	 * In the case of success, the guidance-map maintained by the Parking Guidance System is updated.
+	 */
+	private boolean tryToPark() {
+		// try to reserve a parking spot at the link
+		boolean canParkAtLink = this.parkingManager.reserveSpaceIfVehicleCanParkHere(this.vehicleId, this.currentLinkId);
+		// if a parking spot got reserved, update the guidance-map
+		if (canParkAtLink) this.PGS.removeGuidanceInGuidanceMap(this.vehicleId);
+		
+		return canParkAtLink;
 	}
 
 	@Override
@@ -130,7 +144,7 @@ public class PGSDynLeg extends ParkingDynLeg {
 			// if we are in guidance mode, we have to check for rerouting event
 			if (this.guidanceMode) {
 				// if the parking which is routed to gets occupied we have a rerouting event
-				if (!this.parkingManager.isThereFreeParkingSpaceAt(this.getDestinationLinkId())) {
+				if (this.parkingManager.getNumFreeParkingSpacesAt(this.getDestinationLinkId()) == 0) {
 					this.processReroutingEvent(this.timer.getTimeOfDay());
 				}
 			}
@@ -160,7 +174,8 @@ public class PGSDynLeg extends ParkingDynLeg {
 		this.currentLinkIdx = -1;
 
 		// request new guidance from PGS
-		this.path = this.PGS.guide(this.currentLinkId,
+		this.path = this.PGS.guide(this.vehicleId,
+								   this.currentLinkId,
 								   this.route.getEndLinkId(),
 								   time);
 		
@@ -177,8 +192,9 @@ public class PGSDynLeg extends ParkingDynLeg {
 		this.events.processEvent(new GuidanceFailedEvent(time, this.vehicleId));
 
 		// get navigation to destination
-		this.path = this.PGS.navigate(this.currentLinkId,
-									  this.route.getEndLinkId(),
-									  time);
+		this.path = this.PGS.navigateInsteadOfGuidance(this.vehicleId,
+													   this.currentLinkId,
+													   this.route.getEndLinkId(),
+													   time);
 	}
 }
