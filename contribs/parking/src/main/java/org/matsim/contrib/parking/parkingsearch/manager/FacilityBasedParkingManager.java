@@ -20,6 +20,12 @@
 package org.matsim.contrib.parking.parkingsearch.manager;
 
 import com.google.inject.Inject;
+import com.opencsv.CSVWriterBuilder;
+import com.opencsv.ICSVWriter;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.apache.commons.lang3.mutable.MutableLong;
 import org.apache.logging.log4j.LogManager;
 import org.matsim.api.core.v01.Id;
@@ -28,7 +34,11 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.dynagent.DynAgent;
 import org.matsim.contrib.parking.parkingsearch.ParkingUtils;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSConfigurator;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSUtils;
 import org.matsim.contrib.parking.parkingsearch.sim.ParkingSearchConfigGroup;
+import org.matsim.core.controler.events.ShutdownEvent;
+import org.matsim.core.controler.listener.ShutdownListener;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.utils.misc.Time;
 import org.matsim.facilities.ActivityFacility;
@@ -41,7 +51,7 @@ import java.util.Map.Entry;
 /**
  * @author jbischoff, schlenther, Ricardo Ewert
  */
-public class FacilityBasedParkingManager implements ParkingSearchManager {
+public class FacilityBasedParkingManager implements ParkingSearchManager, ShutdownListener { // added ShutdownListener by Emanuel Skodinis (emanuesk@ethz.ch): needed for closing the CSV-writer
 
 	protected Map<Id<Link>, Integer> capacity = new HashMap<>();
 	protected Map<Id<ActivityFacility>, MutableLong> occupation = new HashMap<>();
@@ -68,9 +78,16 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 	private final int maxTime;
 	private final int timeBinSize;
 	private final int startTime;
+	private ICSVWriter writer; // added by Emanuel Skodinis (emanuesk@ethz.ch): needed for writing the occupation.csv file which is needed for visualising the occupation in Via
 
 	@Inject
-	public FacilityBasedParkingManager(Scenario scenario) {
+	public FacilityBasedParkingManager(Scenario scenario) throws IOException {
+		// added by Emanuel Skodinis (emanuesk@ethz.ch): create new CSW-writer and write the header
+		writer = new CSVWriterBuilder(new FileWriter(PGSConfigurator.occupationCSVFilePath, false)).withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER).build(); // append is false such that the file gets overwritten every time, NO_QUOTE_CHARACTER such that it does not write the strings with quotes
+		// write the header row
+		String[] header = {"X", "Y", "FACILITY_ID", "TIME", "CAPACITY", "OCCUPATION", "PERCENTAGE_OF_OCCUPATION"};
+		writer.writeNext(header);
+
 		psConfigGroup = (ParkingSearchConfigGroup) scenario.getConfig().getModules().get(
 			ParkingSearchConfigGroup.GROUP_NAME);
 		canParkOnlyAtFacilities = psConfigGroup.getCanParkOnlyAtFacilities();
@@ -81,7 +98,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 		this.timeBinSize = 15 * 60;
 		this.maxTime = 24 * 3600 - 1;
 		this.maxSlotIndex = (this.maxTime / this.timeBinSize) + 1;
-		this.startTime = 9 * 3600;
+		this.startTime = 0 * 3600; // changed by Emanuel Skodinis (emanuesk@ethz.ch)
 
 		for (ActivityFacility fac : this.parkingFacilities.values()) {
 			Id<Link> linkId = fac.getLinkId();
@@ -93,6 +110,12 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 			this.facilitiesPerLink.put(linkId, parkingOnLink);
 			this.waitingVehicles.computeIfAbsent(linkId, (k) -> new TreeMap<>());
 			this.occupation.put(fac.getId(), new MutableLong(0));
+
+			// added by Emanuel Skodinis (emanuesk@ethz.ch): write initial occupation of the facilities
+			int capacity = (int) PGSUtils.getCapacity(fac);
+			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", "0.0"};
+			writer.writeNext(row);
+
 			this.reservationsRequests.put(fac.getId(), new MutableLong(0));
 			this.rejectedParkingRequest.put(fac.getId(), new MutableLong(0));
 			this.numberOfParkedVehicles.put(fac.getId(), new MutableLong(0));
@@ -170,19 +193,20 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 			return false;
 		}
 		Set<Id<ActivityFacility>> parkingFacilitiesAtLink = this.facilitiesPerLink.get(linkId);
-		for (Id<ActivityFacility> fac : parkingFacilitiesAtLink) {
-			double cap = this.parkingFacilities.get(fac).getActivityOptions().get(ParkingUtils.ParkingStageInteractionType)
+		for (Id<ActivityFacility> facId : parkingFacilitiesAtLink) {
+			double cap = this.parkingFacilities.get(facId).getActivityOptions().get(ParkingUtils.ParkingStageInteractionType)
 				.getCapacity();
-			this.reservationsRequests.get(fac).increment();
-			if (this.occupation.get(fac).doubleValue() < cap) {
+			this.reservationsRequests.get(facId).increment();
+			double occ = this.occupation.get(facId).doubleValue();
+			if (occ < cap) {
 				// LogManager.getLogger(getClass()).info("occ:
 				// "+this.occupation.get(fac).toString()+" cap: "+cap);
-				this.occupation.get(fac).increment();
-				this.parkingReservation.put(vid, fac);
+				this.occupation.get(facId).increment();
+				this.parkingReservation.put(vid, facId);
 
 				return true;
 			}
-			this.rejectedParkingRequest.get(fac).increment();
+			this.rejectedParkingRequest.get(facId).increment();
 		}
 		return false;
 	}
@@ -205,10 +229,24 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 			this.parkingLocationsOutsideFacilities.put(vehicleId, linkId);
 			return true;
 		} else {
-			Id<ActivityFacility> fac = this.parkingReservation.remove(vehicleId);
-			if (fac != null) {
-				this.parkingLocations.put(vehicleId, fac);
-				this.numberOfParkedVehicles.get(fac).increment();
+			Id<ActivityFacility> facId = this.parkingReservation.remove(vehicleId);
+			if (facId != null) {
+				this.parkingLocations.put(vehicleId, facId);
+				this.numberOfParkedVehicles.get(facId).increment();
+
+				// added by Emanuel Skodinis (emanuesk@ethz.ch): write new row since vehicle got parked and therefore the occupation change has to be logged
+				ActivityFacility fac = parkingFacilities.get(facId);
+				int capacity = (int) PGSUtils.getCapacity(fac);
+				int occ = this.occupation.get(facId).intValue();
+				double percentageOfOccupancy = (double) occ / (double) capacity;
+				String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(percentageOfOccupancy)};
+				writer.writeNext(row);
+				try {
+					writer.flush();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				foundParkingByTime.get(getTimeSlotIndex(time) * timeBinSize).increment();
 				return true;
 			} else {
@@ -226,8 +264,22 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 
 			// we assume the person parks somewhere else
 		} else {
-			Id<ActivityFacility> fac = this.parkingLocations.remove(vehicleId);
-			this.occupation.get(fac).decrement();
+			Id<ActivityFacility> facId = this.parkingLocations.remove(vehicleId);
+			this.occupation.get(facId).decrement();
+
+			// added by Emanuel Skodinis (emanuesk@ethz.ch): write new row since vehicle got unparked and therefore the occupation change has to be logged
+			ActivityFacility fac = parkingFacilities.get(facId);
+			int capacity = (int) this.parkingFacilities.get(facId).getActivityOptions().get(ParkingUtils.ParkingStageInteractionType).getCapacity();
+			int occ = this.occupation.get(facId).intValue();
+			double percentageOfOccupancy = (double) occ / (double) capacity;
+			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(percentageOfOccupancy)};
+			writer.writeNext(row);
+			try {
+				writer.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			unparkByTime.get(getTimeSlotIndex(time) * timeBinSize).increment();
 			return true;
 		}
@@ -383,5 +435,53 @@ public class FacilityBasedParkingManager implements ParkingSearchManager {
 
 	public void registerParkingBeforeGetIn(Id<Vehicle> vehcileId) {
 		this.numberOfParkingBeforeGetIn.get(parkingLocations.get(vehcileId)).increment();
+	}
+
+	/**
+	 * At shutdown close the CSV-writer
+	 * 
+	 * @author Emanuel Skodinis (emanuesk@ethz.ch)
+	 */
+	@Override
+	public void notifyShutdown(ShutdownEvent event) {
+		try {
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @return whether there is free parking space on the link with @param linkId.
+	 * 
+	 * @author Emanuel Skodinis (emanuesk@ethz.ch)
+	 */
+	public boolean isThereFreeParkingSpaceAt(Id<Link> linkId) {
+		// get all parking facilities at the link
+		Set<Id<ActivityFacility>> parkingFacilitiesAtLink = this.facilitiesPerLink.get(linkId);
+		
+		// go over all facilities at the link and check whether any of them has free parking spaces
+		for (Id<ActivityFacility> facility : parkingFacilitiesAtLink) {
+			double capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility));
+			double occupancy = this.occupation.get(facility).doubleValue();
+			if (occupancy < capacity) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return whether there is free parking space at @param facility.
+	 * 
+	 * @author Emanuel Skodinis (emanuesk@ethz.ch)
+	 */
+	@Override
+	public boolean isThereFreeParkingSpaceAt(ActivityFacility facility) {
+		double capacity = PGSUtils.getCapacity(this.parkingFacilities.get(facility.getId()));
+		double occupancy = this.occupation.get(facility.getId()).doubleValue();
+		
+		return occupancy < capacity;
 	}
 }
