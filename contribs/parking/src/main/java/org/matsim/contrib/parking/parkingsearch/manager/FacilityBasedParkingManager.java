@@ -85,7 +85,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 		// added by Emanuel Skodinis (emanuesk@ethz.ch): create new CSW-writer and write the header
 		writer = new CSVWriterBuilder(new FileWriter(PGSConfigurator.occupationCSVFilePath, false)).withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER).build(); // append is false such that the file gets overwritten every time, NO_QUOTE_CHARACTER such that it does not write the strings with quotes
 		// write the header row
-		String[] header = {"X", "Y", "FACILITY_ID", "TIME", "CAPACITY", "OCCUPATION", "PERCENTAGE_OF_OCCUPATION"};
+		String[] header = {"X", "Y", "FACILITY_ID", "TIME", "CAPACITY", "OCCUPATION", "FREE", "PERCENTAGE_OF_OCCUPATION"};
 		writer.writeNext(header);
 
 		psConfigGroup = (ParkingSearchConfigGroup) scenario.getConfig().getModules().get(
@@ -113,7 +113,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 
 			// added by Emanuel Skodinis (emanuesk@ethz.ch): write initial occupation of the facilities
 			int capacity = PGSUtils.getCapacity(fac);
-			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", "0.0"};
+			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", "0", "0.0"};
 			writer.writeNext(row);
 
 			this.reservationsRequests.put(fac.getId(), new MutableLong(0));
@@ -238,8 +238,9 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 				ActivityFacility fac = parkingFacilities.get(facId);
 				int capacity = PGSUtils.getCapacity(fac);
 				int occ = this.occupation.get(facId).intValue();
+				int free = capacity - occ;
 				double percentageOfOccupancy = (double) occ / (double) capacity;
-				String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(percentageOfOccupancy)};
+				String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(free), String.valueOf(percentageOfOccupancy)};
 				writer.writeNext(row);
 				try {
 					writer.flush();
@@ -271,8 +272,9 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 			ActivityFacility fac = parkingFacilities.get(facId);
 			int capacity = (int) this.parkingFacilities.get(facId).getActivityOptions().get(ParkingUtils.ParkingStageInteractionType).getCapacity();
 			int occ = this.occupation.get(facId).intValue();
+			int free = capacity - occ;
 			double percentageOfOccupancy = (double) occ / (double) capacity;
-			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(percentageOfOccupancy)};
+			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), facId.toString(), String.valueOf(time), String.valueOf(capacity), String.valueOf(occ), String.valueOf(free), String.valueOf(percentageOfOccupancy)};
 			writer.writeNext(row);
 			try {
 				writer.flush();
