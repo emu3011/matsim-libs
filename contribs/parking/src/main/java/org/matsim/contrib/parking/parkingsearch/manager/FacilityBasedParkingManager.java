@@ -113,7 +113,7 @@ public class FacilityBasedParkingManager implements ParkingSearchManager, Shutdo
 
 			// added by Emanuel Skodinis (emanuesk@ethz.ch): write initial occupation of the facilities
 			int capacity = PGSUtils.getCapacity(fac);
-			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", "0", "0.0"};
+			String[] row = {String.valueOf(fac.getCoord().getX()), String.valueOf(fac.getCoord().getY()), fac.getId().toString(), "25200.0", String.valueOf(capacity), "0", String.valueOf(capacity), "0.0"};
 			writer.writeNext(row);
 
 			this.reservationsRequests.put(fac.getId(), new MutableLong(0));
