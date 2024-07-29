@@ -154,7 +154,7 @@ public class IdModifier {
 
         // step 5: go over all facilities and assign sensors
         int currentFacilityIdx = 1;
-        for (ActivityFacility sourceFacility : sourceFacilities) {
+        for (ActivityFacility sourceFacility : listOfSourceFacilities) {
 
             // determine whether facility has a sensor
             String hasSensor = "";
