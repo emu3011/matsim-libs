@@ -76,8 +76,8 @@ public class ParkingGuidanceSystem {
         for (ActivityFacility facility : facilities) {
             // this attribute tells whether the facility has a sensor
             String hasSensor = PGSUtils.getAttribute(PGSLibrary.hasSensor, facility);
-            // if the attribute is null, we assume there is a sensor
-            if (hasSensor == null || hasSensor.equals(PGSLibrary.sensor)) {
+            // if the attribute is null, we assume there is no sensor
+            if (hasSensor != null && hasSensor.equals(PGSLibrary.sensor)) {
                 // if the facility has a sensor, we check whether it has capacity
                 int capacity = PGSUtils.getCapacity(facility);
                 if (capacity > 0) {
@@ -194,7 +194,7 @@ public class ParkingGuidanceSystem {
 
     /**
      * Of all @param facilities with free parking spaces, the one that is closest to the @param destinationLink will be @return.
-     * We calculate how close a facility is to the destination with the tripRouter (TODO).
+     * We calculate how close a facility is to the destination with the tripRouter.
      * 
      * Returns null if there is no facility with free parking spots.
      */
