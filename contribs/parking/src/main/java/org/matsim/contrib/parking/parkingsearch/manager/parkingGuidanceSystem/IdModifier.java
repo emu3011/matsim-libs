@@ -139,8 +139,8 @@ public class IdModifier {
         
         // step 2: prepare the result facilities
         Config resultConfig = ConfigUtils.createConfig();
-        Scenario resultSenario = ScenarioUtils.loadScenario(resultConfig);
-        ActivityFacilitiesFactory facFactory = resultSenario.getActivityFacilities().getFactory();
+        Scenario resultScenario = ScenarioUtils.loadScenario(resultConfig);
+        ActivityFacilitiesFactory facFactory = resultScenario.getActivityFacilities().getFactory();
 
         // step 3: get the total number of facilities and calculate the total amount of facilities with a sensor
         Collection<? extends ActivityFacility> sourceFacilities = sourceScenario.getActivityFacilities().getFacilities().values();
@@ -193,13 +193,13 @@ public class IdModifier {
             }
 
             // add result facility to the result scenario
-            resultSenario.getActivityFacilities().addActivityFacility(resultFacility);
+            resultScenario.getActivityFacilities().addActivityFacility(resultFacility);
 
             currentFacilityIdx++;
         }
 
         // step 6: write the result facility into the result facilities file
-        FacilitiesWriter facWriter = new FacilitiesWriter(resultSenario.getActivityFacilities());
+        FacilitiesWriter facWriter = new FacilitiesWriter(resultScenario.getActivityFacilities());
         facWriter.write(resultFacilitiesFilePath);
     }
 }
