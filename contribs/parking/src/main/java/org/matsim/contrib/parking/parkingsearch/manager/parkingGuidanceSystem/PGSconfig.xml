@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <!-- ===================================== ParkingGuidanceSystem ===================================== -->
+    <initialSearchRadius>300</initialSearchRadius>
+    <stepSize>100</stepSize>
+    <stopRadius>1000</stopRadius>
+    <!-- ================================================================================================= -->
+
+    <!-- ================================== FacilityBasedParkingManager ================================== -->
+    <occupationCSVFilePath>/Users/emanuesk/Documents/PGSFiles/occupation.csv</occupationCSVFilePath>
+    <!-- ================================================================================================= -->
+
+    <!-- ==================================== RunParkingSearchExample ==================================== -->
+    <configXMLFilePath>/Users/emanuesk/Documents/PGSFiles/config.xml</configXMLFilePath>
+    <numIterations>1</numIterations>
+    <!-- ================================================================================================= -->
+
+    <!-- =========================================== IdModifier ========================================== -->
+    <sourcePopulationFilePath>/Users/emanuesk/Documents/PGSFiles/population100.xml</sourcePopulationFilePath>
+    <resultPopulationFilePath>/Users/emanuesk/Documents/PGSFiles/population100_PGS.xml</resultPopulationFilePath>
+    <shareOfPGS>0.3</shareOfPGS>
+    <shareOfRandom>0.7</shareOfRandom>
+    <shareOfBenenson>0.0</shareOfBenenson>
+    <shareOfDistanceMemory>0.0</shareOfDistanceMemory>
+    <shareOfNearestParkingSpot>0.0</shareOfNearestParkingSpot>
+    <sourceFacilitiesFilePath>/Users/emanuesk/Documents/PGSFiles/parkingFacilities.xml</sourceFacilitiesFilePath>
+    <resultFacilitiesFilePath>/Users/emanuesk/Documents/PGSFiles/parkingFacilities_PGS.xml</resultFacilitiesFilePath>
+    <shareOfFacilitiesWithSensor>0.05</shareOfFacilitiesWithSensor>
+    <modifyCapacityFlag>true</modifyCapacityFlag>
+    <maximumCapacity>10</maximumCapacity>
+    <probabilityZeroCapacity>0.7</probabilityZeroCapacity>
+    <!-- ================================================================================================= -->
+
+</config>

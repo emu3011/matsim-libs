@@ -1,7 +1,16 @@
 package org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem;
 
+import java.io.File;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+
 /**
  * Configuration parameters for all classes having to do with Parking Guidance System.
+ * The parameters are uninitialized which probably produces errors.
+ * The method initializeFromXML must be used to initialize the parameters correctly.
  * 
  * @author Emanuel Skodinis (emanuesk@ethz.ch)
  */
@@ -12,11 +21,11 @@ public final class PGSConfigurator {
     // -------------------------------------------------------------------------------------------------
     
     // initial search radius for search (choose to be small but big enough to find free spot in most cases)
-    public static final double initialSearchRadius = 300;
+    public static double initialSearchRadius;
     // step size in which the search radius increases
-    public static final double stepSize = 100;
+    public static double stepSize;
     // radius at which the PGS gives up the search
-    public static final double stopRadius = 1000;
+    public static double stopRadius;
     // NOTE: the initial search radius, the step size and the stopRadius could be given to the function for more control for caller.
 
     // =================================================================================================
@@ -26,7 +35,7 @@ public final class PGSConfigurator {
     // FacilityBasedParkingManager
     // -------------------------------------------------------------------------------------------------
 
-    public static final String occupationCSVFilePath = "/Users/emanuesk/Documents/PGSFiles/occupation.csv";
+    public static String occupationCSVFilePath;
 
     // =================================================================================================
 
@@ -36,10 +45,10 @@ public final class PGSConfigurator {
     // -------------------------------------------------------------------------------------------------
 
     // path to config XML-file
-    public static final String configXMLFilePath = "/Users/emanuesk/Documents/PGSFiles/config.xml";
+    public static String configXMLFilePath;
 
     // number of MATSim iterations
-    public static final int numIterations = 1;
+    public static int numIterations;
 
     // =================================================================================================
 
@@ -49,31 +58,67 @@ public final class PGSConfigurator {
     // -------------------------------------------------------------------------------------------------
 
     // the source and result population file paths
-    public static final String sourcePopulationFilePath = "/Users/emanuesk/Documents/PGSFiles/population100.xml";
-    public static final String resultPopulationFilePath = "/Users/emanuesk/Documents/PGSFiles/population100_PGS.xml";
+    public static String sourcePopulationFilePath;
+    public static String resultPopulationFilePath;
     // shares of parking search strategies
-    public static final double shareOfPGS = 0.3;
-    public static final double shareOfRandom = 0.7;
-    public static final double shareOfBenenson = 0.0;
-    public static final double shareOfDistanceMemory = 0.0;
-    public static final double shareOfNearestParkingSpot = 0.0;
+    public static double shareOfPGS;
+    public static double shareOfRandom;
+    public static double shareOfBenenson;
+    public static double shareOfDistanceMemory;
+    public static double shareOfNearestParkingSpot;
 
     // the source and result facility file paths
-    public static final String sourceFacilitiesFilePath = "/Users/emanuesk/Documents/PGSFiles/parkingFacilities.xml";
-    public static final String resultFacilitiesFilePath = "/Users/emanuesk/Documents/PGSFiles/parkingFacilities_PGS.xml";
+    public static String sourceFacilitiesFilePath;
+    public static String resultFacilitiesFilePath;
     // share of facilities with sensor
-    public static final double shareOfFacilitiesWithSensor = 1.0;
+    public static double shareOfFacilitiesWithSensor;
     // flag whether the capacity of the facilities should be modified
-    public static final boolean modifyCapacityFlag = true;
+    public static boolean modifyCapacityFlag;
     // maximum parking space capacity
-    public static final int maximumCapacity = 10;
+    public static int maximumCapacity;
     // probability of facility getting capacity 0
-    public static final double probabilityZeroCapacity = 0.7;
+    public static double probabilityZeroCapacity;
 
     // =================================================================================================
 
     private PGSConfigurator() {
         // prevent creating instances of this class
+    }
+
+    public static void initializeFromXML(String PGSConfigFilePath) throws Exception {
+        File PGSConfigFile = new File(PGSConfigFilePath);
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document PGSConfigDocument = documentBuilder.parse(PGSConfigFile);
+
+        PGSConfigDocument.getDocumentElement().normalize();
+
+        initialSearchRadius = Double.parseDouble(getTagValue("initialSearchRadius", PGSConfigDocument));
+        stepSize = Double.parseDouble(getTagValue("stepSize", PGSConfigDocument));
+        stopRadius = Double.parseDouble(getTagValue("stopRadius", PGSConfigDocument));
+
+        occupationCSVFilePath = getTagValue("occupationCSVFilePath", PGSConfigDocument);
+
+        configXMLFilePath = getTagValue("configXMLFilePath", PGSConfigDocument);
+        numIterations = Integer.parseInt(getTagValue("numIterations", PGSConfigDocument));
+
+        sourcePopulationFilePath = getTagValue("sourcePopulationFilePath", PGSConfigDocument);
+        resultPopulationFilePath = getTagValue("resultPopulationFilePath", PGSConfigDocument);
+        shareOfPGS = Double.parseDouble(getTagValue("shareOfPGS", PGSConfigDocument));
+        shareOfRandom = Double.parseDouble(getTagValue("shareOfRandom", PGSConfigDocument));
+        shareOfBenenson = Double.parseDouble(getTagValue("shareOfBenenson", PGSConfigDocument));
+        shareOfDistanceMemory = Double.parseDouble(getTagValue("shareOfDistanceMemory", PGSConfigDocument));
+        shareOfNearestParkingSpot = Double.parseDouble(getTagValue("shareOfNearestParkingSpot", PGSConfigDocument));
+        sourceFacilitiesFilePath = getTagValue("sourceFacilitiesFilePath", PGSConfigDocument);
+        resultFacilitiesFilePath = getTagValue("resultFacilitiesFilePath", PGSConfigDocument);
+        shareOfFacilitiesWithSensor = Double.parseDouble(getTagValue("shareOfFacilitiesWithSensor", PGSConfigDocument));
+        modifyCapacityFlag = Boolean.parseBoolean(getTagValue("modifyCapacityFlag", PGSConfigDocument));
+        maximumCapacity = Integer.parseInt(getTagValue("maximumCapacity", PGSConfigDocument));
+        probabilityZeroCapacity = Double.parseDouble(getTagValue("probabilityZeroCapacity", PGSConfigDocument));
+    }
+
+    private static String getTagValue(String tag, Document document) {
+        return document.getElementsByTagName(tag).item(0).getTextContent();
     }
 
     // check whether the configuration parameters are legal

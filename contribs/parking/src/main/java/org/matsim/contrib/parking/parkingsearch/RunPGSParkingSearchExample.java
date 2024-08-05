@@ -22,6 +22,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 public class RunPGSParkingSearchExample {
 
 	public static void main(String[] args) throws Exception {
+		PGSConfigurator.initializeFromXML("/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/PGSconfig.xml");
         PGSConfigurator.checkIfParametersAreLegal();
 
 		IdModifier.modifyPersonIdsToStrategy(PGSConfigurator.sourcePopulationFilePath,
