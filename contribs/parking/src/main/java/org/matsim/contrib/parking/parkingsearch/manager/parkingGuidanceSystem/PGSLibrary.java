@@ -8,6 +8,17 @@ package org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem;
 public final class PGSLibrary {
 
     // =================================================================================================
+    // PGS Config File Paths
+    // -------------------------------------------------------------------------------------------------
+
+    public static final String PGSConfigFilePath_grid = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/PGSconfig.xml";
+    public static final String PGSConfigFilePath_SiouxFalls = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/PGSConfig_SiouxFalls.xml";
+    public static final String PGSConfigFilePath_Zuerich = "/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/PGSConfig_Zuerich.xml";
+
+    // =================================================================================================
+
+
+    // =================================================================================================
     // ActivityFacility
     // -------------------------------------------------------------------------------------------------
     
