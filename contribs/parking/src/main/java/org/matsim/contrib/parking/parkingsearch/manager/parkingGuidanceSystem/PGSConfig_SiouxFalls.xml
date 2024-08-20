@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <!-- ===================================== ParkingGuidanceSystem ===================================== -->
+    <initialSearchRadius>300</initialSearchRadius>
+    <stepSize>100</stepSize>
+    <stopRadius>1000</stopRadius>
+    <!-- ================================================================================================= -->
+
+    <!-- ================================== FacilityBasedParkingManager ================================== -->
+    <occupationCSVFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/occupation.csv</occupationCSVFilePath>
+    <!-- ================================================================================================= -->
+
+    <!-- ==================================== RunParkingSearchExample ==================================== -->
+    <configXMLFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/config_default.xml</configXMLFilePath>
+    <numIterations>1</numIterations>
+    <!-- ================================================================================================= -->
+
+    <!-- =========================================== IdModifier ========================================== -->
+    <networkFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/Siouxfalls_network_PT.xml</networkFilePath>
+    <sourcePopulationFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/Siouxfalls_population.xml</sourcePopulationFilePath>
+    <resultPopulationFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/Siouxfalls_population_PGS.xml</resultPopulationFilePath>
+
+    <shareOfPGS>1.0</shareOfPGS>
+    <shareOfRandom>0.0</shareOfRandom>
+    <shareOfBenenson>0.0</shareOfBenenson>
+    <shareOfDistanceMemory>0.0</shareOfDistanceMemory>
+    <shareOfNearestParkingSpot>0.0</shareOfNearestParkingSpot>
+
+    <sourceFacilitiesFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/Siouxfalls_facilities.xml</sourceFacilitiesFilePath>
+    <resultFacilitiesFilePath>/Users/emanuesk/Documents/PGSFiles/Sioux_Falls/Siouxfalls_facilities_PGS.xml</resultFacilitiesFilePath>
+
+    <shareOfFacilitiesWithSensor>1.0</shareOfFacilitiesWithSensor>
+
+    <modifyCapacityFlag>false</modifyCapacityFlag>
+    <maximumCapacity>10</maximumCapacity>
+    <probabilityZeroCapacity>0.7</probabilityZeroCapacity>
+    <!-- ================================================================================================= -->
+
+</config>
