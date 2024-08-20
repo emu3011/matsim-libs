@@ -230,6 +230,9 @@ public class ParkingAgentLogic implements DynAgentLogic {
 	protected DynAction nextStateAfterActivity(DynAction oldAction, double now) {
 		// we could either depart by car or not next
 		if (plan.getPlanElements().size() >= planIndex + 1) {
+			// for debugging the out of bounds error
+			if (plan.getPlanElements().size() == planIndex + 1)
+				System.out.print("stop");
 			planIndex++;
 			this.currentPlanElement = plan.getPlanElements().get(planIndex);
 			Leg currentLeg = (Leg) currentPlanElement;
@@ -258,12 +261,12 @@ public class ParkingAgentLogic implements DynAgentLogic {
 				this.stageInteractionType = ParkingUtils.ParkingStageInteractionType;
 				return new StaticPassengerDynLeg(walkLeg.getRoute(), walkLeg.getMode());
 			} else if (currentLeg.getMode().equals(TransportMode.pt)) {
-				if (currentLeg.getRoute() instanceof TransitPassengerRoute) {
-					throw new IllegalStateException("not yet implemented");
-				} else {
+				//if (currentLeg.getRoute() instanceof TransitPassengerRoute) {
+				//	throw new IllegalStateException("not yet implemented");
+				//} else {
 					this.lastParkActionState = LastParkActionState.NONCARTRIP;
 					return new StaticPassengerDynLeg(currentLeg.getRoute(), currentLeg.getMode());
-				}
+				//}
 				//teleport or pt route
 			} else {
 				//teleport
