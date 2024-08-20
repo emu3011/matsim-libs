@@ -8,19 +8,23 @@ import java.util.Set;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.api.core.v01.population.PopulationWriter;
 import org.matsim.contrib.parking.parkingsearch.ParkingUtils;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.gbl.MatsimRandom;
+import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.population.io.PopulationReader;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.facilities.MatsimFacilitiesReader;
 import org.matsim.facilities.ActivityFacilitiesFactory;
 import org.matsim.facilities.ActivityFacility;
 import org.matsim.facilities.ActivityOption;
+import org.matsim.facilities.ActivityOptionImpl;
 import org.matsim.facilities.FacilitiesWriter;
 
 /**
@@ -47,7 +51,8 @@ public class IdModifier {
      *  4. @param shareDistanceMemory
      *  5. @param shareNearestParkingSpot
      */
-    public static void modifyPersonIdsToStrategy(String sourcePopulationFilePath,
+    public static void modifyPersonIdsToStrategy(String networkFilePath,
+                                                 String sourcePopulationFilePath,
                                                  String resultPopulationFilePath,
                                                  double shareOfPGS,
                                                  double shareOfRandom,
@@ -61,6 +66,10 @@ public class IdModifier {
         PopulationReader populationReader = new PopulationReader(sourceScenario);
         populationReader.readFile(sourcePopulationFilePath);
         
+        // read in network
+        MatsimNetworkReader networkReader = new MatsimNetworkReader(sourceScenario.getNetwork());
+        networkReader.readFile(networkFilePath);
+
         // step 2: prepare the result population
         Config resultConfig = ConfigUtils.createConfig();
         Scenario resultSenario = ScenarioUtils.loadScenario(resultConfig);
@@ -83,7 +92,9 @@ public class IdModifier {
         // step 5: go over all persons and assign parking strategies
         int currentPersonIdx = 1;
         for (Person sourcePerson : listOfSourcePersons) {
-
+            // ignore persons that are freight
+            if (sourcePerson.getAttributes().getAsMap().get("isFreight")!=null && (Boolean)sourcePerson.getAttributes().getAsMap().get("isFreight"))
+                continue;
             // determine parking strategy
             String parkingStrategy = "";
             if (currentPersonIdx <= numPGS) {
@@ -107,8 +118,28 @@ public class IdModifier {
             for (String attributeKey : sourcePerson.getAttributes().getAsMap().keySet()) {
                 resultPerson.getAttributes().putAttribute(attributeKey, sourcePerson.getAttributes().getAttribute(attributeKey));
             }
+            // ignore persons that have only one plan element since they caused out-of-bounds trouble (?)
+            if (sourcePerson.getSelectedPlan().getPlanElements().size() == 1)
+                continue;
+
             // add plan of source person to result person
             resultPerson.addPlan(sourcePerson.getSelectedPlan());
+
+            // set the end time of the last act to undefined since otherwise it is looked for the next act, which does not exist (=> out-of-bounds)
+            List<PlanElement> planElements = resultPerson.getPlans().get(0).getPlanElements();
+            Activity act = (Activity)planElements.get(planElements.size() - 1);
+            act.setEndTimeUndefined();
+
+            // the following was for siouxfalls but for zuerich, there is already a link id associated to every plan element
+            // for (PlanElement pe : resultPerson.getPlans().get(0).getPlanElements()) {
+            //     if (pe instanceof Activity) {
+            //         // here add the link id
+            //         Coord coord = ((Activity)pe).getCoord();
+            //         Link link = NetworkUtils.getNearestLinkExactly(sourceScenario.getNetwork(), coord);
+            //         ((Activity)pe).setLinkId(link.getId());
+
+            //     }
+            // }
 
             // add result person to the result scenario
             resultSenario.getPopulation().addPerson(resultPerson);
@@ -128,7 +159,8 @@ public class IdModifier {
      * Given are the @param sourceFacilitiesFilePath and the @param resultFacilitiesFilePath and the 
      * @param shareOfFacilitiesWithSensor
      */
-    public static void modifyFacilityIdsToKnowledge(String sourceFacilitiesFilePath,
+    public static void modifyFacilityIdsToKnowledge(String networkFilePath,
+                                                    String sourceFacilitiesFilePath,
                                                     String resultFacilitiesFilePath,
                                                     double shareOfFacilitiesWithSensor) {
         // step 1: read the source facilities from the source facilities file path
@@ -136,6 +168,9 @@ public class IdModifier {
         Scenario sourceScenario = ScenarioUtils.createMutableScenario(sourceConfig);
         MatsimFacilitiesReader facilitiesReader = new MatsimFacilitiesReader(sourceScenario);
         facilitiesReader.readFile(sourceFacilitiesFilePath);
+
+        MatsimNetworkReader networkReader = new MatsimNetworkReader(sourceScenario.getNetwork());
+        networkReader.readFile(networkFilePath);
         
         // step 2: prepare the result facilities
         Config resultConfig = ConfigUtils.createConfig();
@@ -191,9 +226,19 @@ public class IdModifier {
                 }
                 resultFacility.addActivityOption(activityOption);
             }
+            // for siouxfalls:
+            // Link link = NetworkUtils.getNearestLinkExactly(sourceScenario.getNetwork(), sourceFacility.getCoord());
+            // ((ActivityFacilityImpl) sourceFacility).setLinkId(link.getId());
+            // ((ActivityFacilityImpl) resultFacility).setLinkId(link.getId());
+
+            // add parking activity (right now with 10000 parking capacity)
+            ActivityOption parkingActivityOption = new ActivityOptionImpl(ParkingUtils.ParkingStageInteractionType);
+            parkingActivityOption.setCapacity(10000);
+            resultFacility.addActivityOption(parkingActivityOption);
 
             // add result facility to the result scenario
             resultScenario.getActivityFacilities().addActivityFacility(resultFacility);
+            resultScenario.getActivityFacilities().addActivityFacility(sourceFacility); // for siouxfalls
 
             currentFacilityIdx++;
         }
