@@ -57,6 +57,8 @@ public final class PGSConfigurator {
     // IdModifier
     // -------------------------------------------------------------------------------------------------
 
+    // the network file path
+    public static String networkFilePath;
     // the source and result population file paths
     public static String sourcePopulationFilePath;
     public static String resultPopulationFilePath;
@@ -102,6 +104,7 @@ public final class PGSConfigurator {
         configXMLFilePath = getTagValue("configXMLFilePath", PGSConfigDocument);
         numIterations = Integer.parseInt(getTagValue("numIterations", PGSConfigDocument));
 
+        networkFilePath = getTagValue("networkFilePath", PGSConfigDocument);
         sourcePopulationFilePath = getTagValue("sourcePopulationFilePath", PGSConfigDocument);
         resultPopulationFilePath = getTagValue("resultPopulationFilePath", PGSConfigDocument);
         shareOfPGS = Double.parseDouble(getTagValue("shareOfPGS", PGSConfigDocument));
