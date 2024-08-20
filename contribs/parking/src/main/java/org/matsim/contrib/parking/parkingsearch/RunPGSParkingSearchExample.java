@@ -3,6 +3,7 @@ package org.matsim.contrib.parking.parkingsearch;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.IdModifier;
 import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSConfigurator;
+import org.matsim.contrib.parking.parkingsearch.manager.parkingGuidanceSystem.PGSLibrary;
 import org.matsim.contrib.parking.parkingsearch.sim.ParkingSearchConfigGroup;
 import org.matsim.contrib.parking.parkingsearch.sim.SetupParking;
 import org.matsim.core.config.Config;
@@ -22,10 +23,11 @@ import org.matsim.core.scenario.ScenarioUtils;
 public class RunPGSParkingSearchExample {
 
 	public static void main(String[] args) throws Exception {
-		PGSConfigurator.initializeFromXML("/Users/emanuesk/Documents/GitHub/matsim-libs/contribs/parking/src/main/java/org/matsim/contrib/parking/parkingsearch/manager/parkingGuidanceSystem/PGSconfig.xml");
+		PGSConfigurator.initializeFromXML(PGSLibrary.PGSConfigFilePath_Zuerich);
         PGSConfigurator.checkIfParametersAreLegal();
 
-		IdModifier.modifyPersonIdsToStrategy(PGSConfigurator.sourcePopulationFilePath,
+		IdModifier.modifyPersonIdsToStrategy(PGSConfigurator.networkFilePath,
+											 PGSConfigurator.sourcePopulationFilePath,
 											 PGSConfigurator.resultPopulationFilePath,
 											 PGSConfigurator.shareOfPGS,
 											 PGSConfigurator.shareOfRandom,
@@ -33,12 +35,17 @@ public class RunPGSParkingSearchExample {
 											 PGSConfigurator.shareOfDistanceMemory,
 											 PGSConfigurator.shareOfNearestParkingSpot);
 		
-		IdModifier.modifyFacilityIdsToKnowledge(PGSConfigurator.sourceFacilitiesFilePath,
+		IdModifier.modifyFacilityIdsToKnowledge(PGSConfigurator.networkFilePath,
+												PGSConfigurator.sourceFacilitiesFilePath,
 												PGSConfigurator.resultFacilitiesFilePath,
 												PGSConfigurator.shareOfFacilitiesWithSensor);
 
 		// step 1: load config file
 		Config config = ConfigUtils.loadConfig(PGSConfigurator.configXMLFilePath, new ParkingSearchConfigGroup());
+
+		// set population and facilities file path in code instead manually in config
+		config.plans().setInputFile(PGSConfigurator.resultPopulationFilePath);
+		config.facilities().setInputFile(PGSConfigurator.resultFacilitiesFilePath);
 
 		// step 2: get parking search config group and set parking search strategy to ParkingGuidance
 		ParkingSearchConfigGroup configGroup = (ParkingSearchConfigGroup) config.getModules().get(ParkingSearchConfigGroup.GROUP_NAME);
